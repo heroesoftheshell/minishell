@@ -4,7 +4,7 @@ extern char **environ;
 
 int main() {
   char **s = environ;
-  setenv("NAMAAAAA", "valuuuuueeee", 1);
+  setenv("NAMAAAAA", "1", 1);
   s = environ;
   unsetenv("LOGNAME11");
 

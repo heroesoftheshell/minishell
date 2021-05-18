@@ -6,6 +6,8 @@
 #define PROMPT_SIZE 11
 #define BUFFER_SIZE 1024
 
+void print_logo(void);
+
 int	show_prompt(void)
 {
 	int		input_bytes;
@@ -22,4 +24,11 @@ int	show_prompt(void)
 	// FIXME : input str parse start and handle data
 	printf("%s", buf);
 	return (0);
+}
+
+int main(void)
+{
+	print_logo();
+	while (1)
+		show_prompt();
 }
