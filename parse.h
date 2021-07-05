@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 19:44:51 by hekang            #+#    #+#             */
-/*   Updated: 2021/05/17 19:54:14 by hekang           ###   ########.fr       */
+/*   Updated: 2021/05/18 20:38:47 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define PARSE_H
 # include <stdio.h>
 # include <unistd.h>
-
+# include <stdlib.h>
 typedef	enum	e_cmd_type
 {
 	NONE = 0,
