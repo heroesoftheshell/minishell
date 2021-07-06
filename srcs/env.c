@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/06 17:24:04 by hekang           ###   ########.fr       */
+/*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
+/*   Updated: 2021/07/06 17:33:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <string.h>
-#include "libft.h"
+#include "minishell.h"
 
-char		*get_env_path(void);
-void		run_cmd(char *cmd);
+char	*get_env_path(void)
+{
+		extern char **environ;
+		char		*path;
+
+		path = getenv("PATH");
+		return (path);
+}

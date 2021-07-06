@@ -6,11 +6,11 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/07/06 12:42:18 by hekang           ###   ########.fr        #
+#    Updated: 2021/07/06 17:24:32 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC		= main.c
+SRC		= main.c env.c cmd.c
 
 SRCDIR	= ./srcs/
 SRCS 	= $(addprefix $(SRCDIR), $(SRC))
