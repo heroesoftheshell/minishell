@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 15:04:23 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/05 17:22:01 by hekang           ###   ########.fr       */
+/*   Updated: 2021/07/06 09:55:05 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,6 @@ int ft_readline()
         // input = readline(shell_prompt);
         input = readline("\033[1;4;34;47mHOS >\033[0m ");
 		// line = split(input, '\n');
-
-		strtok(input, "\n");
-        printf("%s\n", input);
-		printf("%d\n",rl_on_new_line());
         // line = ft_split(input, '|');
 		cnt = 0;
 		pipe(pipefd);
