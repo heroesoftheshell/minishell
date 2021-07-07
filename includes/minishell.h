@@ -35,6 +35,7 @@ enum	e_err_type
 	PIPE_SYNTAX_ERR,
 	REDIRECT_SYNTAX_ERR,
 	NEWLINE_SYNTAX_ERR,
+	COMMAND_NOT_FOUND,
 	FAIL
 };
 
@@ -49,7 +50,13 @@ enum	e_cmd_type
 	CMD_EXIT
 };
 
-
+enum	e_parsed_data_order
+{
+	COMMAND,
+	OPTION,
+	ARG,
+	REDIRECT
+};
 
 void	print_parse_err(int err_type, char c);
 
