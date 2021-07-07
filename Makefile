@@ -10,7 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		= main.c env.c cmd.c
+# SRC		= main.c env.c cmd.c
+SRC		= parse_test.c err_msg.c
 
 SRCDIR	= ./srcs/
 SRCS 	= $(addprefix $(SRCDIR), $(SRC))
@@ -23,7 +24,7 @@ LIBNAME = libft.a
 
 NAME	= minishell
 
-GCC 	= GCC
+GCC 	= gcc
 GCCFLAG = -Wall -Werror -Wextra
 # -g -fsanitize=address
 RM 		= rm -f
