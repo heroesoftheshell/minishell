@@ -51,7 +51,7 @@ int		validate_redirect_expression(const char **str, char start_c)
 		skip_space(str);
 		if (**str == 0)
 		{
-			print_parse_err(NEWLINE_SYNTAX_ERR, 0);
+			print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
 			return (NEWLINE_SYNTAX_ERR);
 		}
 	}
@@ -59,19 +59,19 @@ int		validate_redirect_expression(const char **str, char start_c)
 	{
 		if (is_redirect_sign(**str))
 		{
-			print_parse_err(REDIRECT_SYNTAX_ERR, **str);
+			print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
 			return (REDIRECT_SYNTAX_ERR);
 		}
 		return (SUCCESS);
 	}
 	if (**str == 0)
 	{
-		print_parse_err(NEWLINE_SYNTAX_ERR, 0);
+		print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
 		return (NEWLINE_SYNTAX_ERR);
 	}
 	else if (is_redirect_sign(**str) && start_c != **str)
 	{
-		print_parse_err(REDIRECT_SYNTAX_ERR, **str);
+		print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
 		return (REDIRECT_SYNTAX_ERR);
 	}
 	else if (is_redirect_sign(**str) && start_c == **str)
@@ -80,7 +80,7 @@ int		validate_redirect_expression(const char **str, char start_c)
 		(*str)++;
 		if (**str == 0)
 		{
-			print_parse_err(NEWLINE_SYNTAX_ERR, 0);
+			print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
 			return (NEWLINE_SYNTAX_ERR);
 		}
 		else if (ft_isspace(**str))
@@ -88,7 +88,7 @@ int		validate_redirect_expression(const char **str, char start_c)
 			skip_space(str);
 			if (**str == 0)
 			{
-				print_parse_err(NEWLINE_SYNTAX_ERR, 0);
+				print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
 				return (NEWLINE_SYNTAX_ERR);
 			}
 			else if (!is_redirect_sign(**str) && ft_isprint(**str))
@@ -122,7 +122,7 @@ char	**line_parse(const char *line)
 
 	if (*line == '|')
 	{
-		print_parse_err(PIPE_SYNTAX_ERR, *line);
+		print_err_msg(PIPE_SYNTAX_ERR, "|", 0);
 		free((void *)line);
 		exit(258);
 	}
@@ -159,6 +159,105 @@ int		is_hyphen(char c)
 // 	return (SUCCESS);
 // }
 
+char	*conv_env_var(const char **src)
+{
+	const char	*src_start;
+	char		*env_key;
+	char		*env_value;
+	size_t		str_len;
+
+	(*src)++;
+	src_start = *src;
+	str_len = 0;
+	while (**src)
+	{
+		if (**src == '"' || ft_isspace(**src))
+		{
+			env_key = ft_substr(src_start, 0, str_len);
+			env_value = get_env_variable((const char *)env_key);
+			if (env_key)
+				free(env_key);
+			return (env_value);
+		}
+		else if (**src == '\0')
+		{
+			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+			return (NULL);
+		}
+		str_len++;
+		(*src)++;
+	}
+	return (NULL);
+}
+
+char	*parse_quote_str(const char **src, char quote_char)
+{
+	char		*value;
+	const char	*src_start;
+	char		*env_value;
+	char		*temp;
+	char		*substr;
+	int			str_len;
+
+	value = NULL;
+	(*src)++;
+	src_start = *src;
+	str_len = 0;
+	while (**src)
+	{
+		if (**src == '$' && quote_char == '"')
+		{
+			env_value = conv_env_var(src);
+			if (env_value != NULL)
+			{
+				if (value == NULL)
+				{
+					value = ft_substr(src_start, 0, str_len);
+					temp = ft_strjoin(value, env_value);
+				}
+				else
+				{
+					substr = ft_substr(src_start, 0, str_len);
+					temp = ft_strjoin(value, substr);
+					free(value);
+					free(substr);
+					value = temp;
+					temp = ft_strjoin(value, env_value);
+				}
+				free(value);
+				value = temp;
+				// free(env_value);
+				src_start = *src;
+				str_len = 0;
+			}
+			if (**src == '\0')
+				return (NULL);
+		}
+		if (**src == '\0')
+		{
+			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+			return (NULL);
+		}
+		else if (**src == quote_char)
+		{
+			if (value == NULL)
+				value = ft_substr(src_start, 0, str_len);
+			else
+			{
+				substr = ft_substr(src_start, 0, str_len);
+				temp = ft_strjoin(value, substr);
+				free(value);
+				free(substr);
+				value = temp;
+			}
+			return (value);
+		}
+		str_len++;
+		(*src)++;
+	}
+	return (NULL);
+}
+
 char	**cmd_chunk_parse(const char *chunk)
 {
 	// validate
@@ -166,18 +265,27 @@ char	**cmd_chunk_parse(const char *chunk)
 	// 2. command arg
 	// 3. redirect file exist
 	char	**parsed_data;
+	char	*str_for_test;
 	// int		curr_parse_order;
 
 	parsed_data = (char **)ft_calloc(4, sizeof(char *));
 	// curr_parse_order = COMMAND;
 	if (parsed_data == NULL)
 		return (NULL);
+	skip_space(&chunk);
 	while (*chunk)
 	{
 		// printf("%c\n", *chunk);
 		if (is_quote(*chunk))
 		{
 			// TODO: handle quote(with space)
+			str_for_test = parse_quote_str(&chunk, *chunk);
+			if (str_for_test == NULL)
+			{
+				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+				return (NULL);
+			}
+			printf("%s", str_for_test);
 		}
 		else if (is_hyphen(*chunk))
 		{
@@ -196,25 +304,36 @@ char	**cmd_chunk_parse(const char *chunk)
 		//TODO: parse command or arg
 		chunk++;
 	}
-	return (SUCCESS);
+	return (parsed_data);
 }
 
 int 	main()
 {
 	char	*line;
 	char	**cmd_chunks;
+	char	**parsed_chunk_data;
+	int		chunk_idx;
 
 	while (1)
 	{
 		line = readline("hosh$ ");
 		cmd_chunks = line_parse((const char *)line);
-		while (cmd_chunks != NULL)
+		chunk_idx = 0;
+		while (cmd_chunks[chunk_idx] != NULL)
 		{
-			// excute
-			printf("%s\n", *cmd_chunks);
-			cmd_chunk_parse((const char *)*cmd_chunks);
-			// delete_split_strs(cmd_chunks);
-			cmd_chunks++;
+			// printf("%s\n", cmd_chunks[chunk_idx]);
+			parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
+			if (parsed_chunk_data == NULL)
+			{
+				// perror("hosh: ");
+				delete_split_strs(cmd_chunks);
+				break ;
+			}
+			// TODO: process excute
+			// ex 1) exec_func(const char ** parsed_chunk_data, char *envp);
+			// ex 2) exec_func(const char *cmd, const char *arg, const char *redir, char *envp)
+			delete_split_strs(parsed_chunk_data);
+			chunk_idx++;
 		}
 		free(line);
 	}

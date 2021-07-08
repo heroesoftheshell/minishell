@@ -14,9 +14,18 @@
 
 char	*get_env_path(void)
 {
-		extern char **environ;
 		char		*path;
 
 		path = getenv("PATH");
 		return (path);
+}
+
+char	*get_env_variable(const char *env_key)
+{
+	char		*env_value;
+
+	if (env_key == NULL)
+		return (NULL);
+	env_value = getenv(env_key);
+	return (env_value);
 }

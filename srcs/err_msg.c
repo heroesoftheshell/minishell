@@ -12,22 +12,30 @@
 
 #include "minishell.h"
 
-void	print_parse_err(int err_type, char c)
+void	print_err_msg(int err_type, const char *str, char c)
 {
-	write(STDERR_FILENO, "hosh: ", 7);
-	if (err_type == PIPE_SYNTAX_ERR || err_type == REDIRECT_SYNTAX_ERR)
-		printf("hosh: syntax error near unexpected token `%c'\n", c);
-	else if (err_type == NEWLINE_SYNTAX_ERR)
-		printf("hosh: syntax error near unexpected token `newline'\n");
+	if (err_type == PIPE_SYNTAX_ERR || err_type == REDIRECT_SYNTAX_ERR ||\
+		err_type == NEWLINE_SYNTAX_ERR)
+	{
+		ft_putstr_fd(SYNTAX_ERR_MSG_HEADER, STDERR_FILENO);
+		if (err_type == REDIRECT_SYNTAX_ERR)
+			ft_putchar_fd(c, STDERR_FILENO);
+		else
+			ft_putstr_fd((char *)str, STDERR_FILENO);
+		ft_putendl_fd(SYNTAX_ERR_MSG_TAIL, STDERR_FILENO);
+	}
+	else if (err_type == COMMAND_NOT_FOUND)
+	{
+
+	}
+	else if (err_type == QUOTE_EXIT_ERR)
+	{
+		ft_putendl_fd((char *)str, STDERR_FILENO);
+	}
 }
 
-void	print_syntax_err(int err_type, char *buf)
+void	print_system_err(const char *str)
 {
-	write(STDERR_FILENO, "hosh: syntax error near unexpected token", 41);
-	if (err_type == PIPE_SYNTAX_ERR)
-		write(STDERR_FILENO, "`|'\n", 5);
-	else if (err_type == REDIRECT_SYNTAX_ERR)
-		write(STDERR_FILENO, buf, 5);
-	else if (err_type == NEWLINE_SYNTAX_ERR)
-		write(STDERR_FILENO, "`newline'\n", 11);
+	write(STDERR_FILENO, "hosh: ", 6);
+	perror(str);
 }

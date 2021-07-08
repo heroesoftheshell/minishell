@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 # SRC		= main.c env.c cmd.c
-SRC		= parse_test.c err_msg.c
+SRC		= parse_test.c err_msg.c env.c
 
 SRCDIR	= ./srcs/
 SRCS 	= $(addprefix $(SRCDIR), $(SRC))
