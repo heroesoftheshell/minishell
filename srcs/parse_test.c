@@ -126,6 +126,7 @@ char	**line_parse(const char *line)
 		free((void *)line);
 		exit(258);
 	}
+	// FIXME: parser should consider pipe sign in quote
 	pipe_cmd_chunk = ft_split(line, '|');
 	str_index = 0;
 	while (pipe_cmd_chunk[str_index])
@@ -271,6 +272,90 @@ char	*parse_quote_str(const char **src, char quote_char)
 // 	return (0);
 // }
 
+// int		parse_cmd(const char **str, char **parsed_datas)
+// {
+// 	const char	*src_start;
+// 	char		*quote_str;
+// 	char		*substr;
+// 	char		*temp;
+// 	int			str_len;
+
+// 	src_start = *str;
+// 	quote_str = NULL;
+// 	substr = NULL;
+// 	temp = NULL;
+// 	str_len = 0;
+// 	while(**str)
+// 	{
+// 		if (is_redirect_sign(**str))
+// 		{
+// 			parse_redirect(str, parsed_datas);
+// 			if (str_len > 0)
+// 				parsed_datas[COMMAND] = ft_substr(src_start, 0, str_len);
+// 			else if (str_len == 0)
+// 			{
+// 				src_start = *str;
+// 				str_len = 0;
+// 			}
+// 			continue;
+// 		}
+// 		else if (is_quote(**str))
+// 		{
+// 			quote_str = parse_quote_str(str, **str);
+// 			if (str_len > 0)
+// 			{
+// 				substr = ft_substr(src_start, 0, str_len);
+// 				if (parsed_datas[COMMAND] == NULL)
+// 					parsed_datas[COMMAND] = ft_strjoin(substr, quote_str);
+// 				else
+// 				{
+// 					ft_strjoin(temp, substr);
+// 				}
+// 				free(substr);
+// 				free(quote_str);
+// 				substr = NULL;
+// 				quote_str = NULL;
+// 				src_start = *str;
+// 				str_len = 0;
+// 				continue;
+// 			}
+// 		}
+// 		else if (ft_isspace(**str))
+// 		{
+
+// 		}
+// 		(*str)++;
+// 		str_len++;
+// 	}
+// 	if (**str == '\0' && str_len > 0)
+// 	{
+// 		if (temp)
+// 		{
+
+// 		}
+// 		else
+// 		{
+
+// 		}
+// 	}
+// }
+
+// char	*parse_option(const char **chunk, char **parsed_datas)
+// {
+
+// }
+
+// char	**parse_argv(const char **chunk, char **parsed_datas)
+// {
+
+// }
+
+// // TODO : parse redirect file name and skip space after file name
+// char	**parse_redirect(const char **chunk, char **parsed_datas)
+// {
+
+// }
+
 char	**cmd_chunk_parse(const char *chunk)
 {
 	// validate
@@ -319,6 +404,7 @@ char	**cmd_chunk_parse(const char *chunk)
 	}
 	return (parsed_data);
 }
+
 
 int 	main()
 {
