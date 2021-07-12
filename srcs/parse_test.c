@@ -258,6 +258,19 @@ char	*parse_quote_str(const char **src, char quote_char)
 	return (NULL);
 }
 
+// int		insert_str_to_parsed_data(char **parsed_data, char *str, int curr_parse_order)
+// {
+// 	if (curr_parse_order == COMMAND)
+// 		parsed_data[COMMAND] = str;
+// 	// else if (curr_parse_order == OPTION)
+// 	return (0);
+// }
+
+// int		validate_option(char *str, int curr_parse_order)
+// {
+// 	return (0);
+// }
+
 char	**cmd_chunk_parse(const char *chunk)
 {
 	// validate
