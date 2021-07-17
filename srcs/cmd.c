@@ -19,7 +19,16 @@ void		run_cmd(char *cmd)
 	int			cnt;
 	extern char	**environ;
 	char 		**chunk;
+	char		**line;
+	// pid_t		pids[128];
 
+	line = ft_split(cmd, '|');
+	cnt = -1;
+	// while (++cnt < ft_strlen(line))
+	// {
+	// 	fork();
+	// 	wait(NULL);
+	// }
 	chunk = ft_split(cmd, ' ');
 
 	path = get_env_path();

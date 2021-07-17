@@ -46,6 +46,7 @@ int			main(void)
 	// int		cnt;
 	// int		pipefd1[2];
 	// int		pipefd2[2];
+	pid_t	pid;
 
 	rl_bind_key('\t', rl_complete);
 	// printf("PATH : %s", get_env_path());
@@ -53,7 +54,13 @@ int			main(void)
 	while (1)
 	{
         input = readline("\033[1;4;34;47mHOS >\033[0m ");
-		run_cmd(input);
+		// if (input != NULL)
+		// {
+		pid = fork();
+		waitpid(0, 0, 0);
+		if (pid == 0)
+			run_cmd(input);
+		// }
 	// 	line = ft_split(input, '|');
 	// 	cnt = 0;
 	// 	pipe(pipefd1);
