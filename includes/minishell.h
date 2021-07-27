@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/06 17:24:04 by hekang           ###   ########.fr       */
+/*   Updated: 2021/07/23 17:00:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <readline/readline.h>
+// #include <readline/readline.h>
 #include <readline/history.h>
+#include "readline.h"
 #include <string.h>
 #include "libft.h"
 # define CMDSTR_ECHO			"echo"
@@ -67,4 +68,10 @@ void	print_system_err(const char *str);
 char	*get_env_path(void);
 char	*get_env_variable(const char *env_key);
 void	run_cmd(char *cmd);
+void	ft_chdir(char **cmd);
+void	ft_echo(char **cmd);
+void	ft_pwd();
+
+
+
 #endif

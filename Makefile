@@ -6,50 +6,44 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/07/06 17:24:32 by hekang           ###   ########.fr        #
+#    Updated: 2021/07/27 22:42:55 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC		= main.c env.c cmd.c
-# SRC		= parse_test.c err_msg.c env.c
-
-SRCDIR	= ./srcs/
-SRCS 	= $(addprefix $(SRCDIR), $(SRC))
-
-OBJS	= $(SRCS:.c=.o)
-
-INCDIR	= ./includes/
-LIBDIR	= ./libft/
-LIBNAME = libft.a
-
 NAME	= minishell
 
-GCC 	= gcc
 GCCFLAG = -Wall -Werror -Wextra
-# -g -fsanitize=address
 RM 		= rm -f
 
-%.o:		%.c
-		$(GCC) $(GCCFLAG) -I$(INCDIR) -c $< -o $@
+SRCS	= main env cmd ft_chdir ft_echo ft_pwd 
+LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy
+# SRCS		= parse_test.c err_msg.c env.c
 
-all:		$(NAME)
+OBJS	= $(FIL:.c=.o)
+INCS	= -I./includes
+LIBS	= -L./lib -lreadline -ltermcap -lhistory
 
-$(NAME):	$(LIBNAME) $(OBJS)
-		$(GCC) $(GCCFLAG) -I$(INCDIR) -o $(NAME) $(OBJS) -lreadline $(LIBNAME)
+FIL		= \
+		$(addsuffix .c, $(addprefix srcs/, $(SRCS))) \
+		$(addsuffix .c, $(addprefix libft/, $(LIBFT))) 
 
-bonus:		all
+all :	$(NAME)
 
-$(LIBNAME):
-		@$(MAKE) -C $(LIBDIR) bonus
-		@cp $(addprefix $(LIBDIR), $(LIBNAME)) $(LIBNAME)
+$(OBJS): %.o : %.c includes/minishell.h includes/libft.h
+		gcc $(GCCFLAG) $(INCS) -c -o $@ $<
 
-clean:
-		$(RM) $(OBJS) $(OJBS_B)
+# srcs/main.o : srcs/main.c
+# 		gcc $(GCCFLAG) $(INCS) -c -o $@ $<
 
-fclean:		clean
-		$(RM) $(NAME) $(LIBNAME)
-		@$(MAKE) -C $(LIBDIR) fclean
+$(NAME) : $(OBJS)
+		gcc $(GCCFLAG) $^ -o $@ $(LIBS)
 
-re:			fclean all
+clean : 
+		$(RM) $(OBJS)
 
-.PHONY:		all clean fclean re bonus
+fclean : clean
+		$(RM) $(NAME)
+
+re :	fclean all
+
+.PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/06 17:49:05 by hekang           ###   ########.fr       */
+/*   Updated: 2021/07/27 12:16:45 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ void		run_cmd(char *cmd)
 	// 	wait(NULL);
 	// }
 	chunk = ft_split(cmd, ' ');
+	if (!ft_strcmp(chunk[0], "cd"))
+		ft_chdir(chunk);
+	if (!ft_strcmp(chunk[0], "echo"))
+		ft_echo(chunk);
+	if (!ft_strcmp(chunk[0], "pwd"))
+		ft_pwd();
+	// if (!ft_strcmp(chunk[0], "export"))
+	// 	ft_export(chunk);
 
 	path = get_env_path();
 	split_path = ft_split(path, ':');
