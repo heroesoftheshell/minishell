@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 22:31:24 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/19 15:06:37 by hekang           ###   ########.fr       */
+/*   Updated: 2021/07/29 17:37:52 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int		ft_strcmp(const char *s1, const char *s2)
 {
 	unsigned char	c1;
 	unsigned char	c2;
-	size_t	n;
+	// size_t	n;
 
-	n = ft_strlen(s1) + 1;
+	// n = ft_strlen(s1) + 1;
 	if (s1 == NULL && s2 == NULL)
 		return (0);
 	while (1)

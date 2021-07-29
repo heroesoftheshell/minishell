@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
+#    By: ghong <ghong@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/07/27 22:42:55 by hekang           ###   ########.fr        #
+#    Updated: 2021/07/29 17:39:09 by ghong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,20 @@ RM 		= rm -f
 
 SRCS	= main env cmd ft_chdir ft_echo ft_pwd 
 LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy
-# SRCS		= parse_test.c err_msg.c env.c
+# SRCS	= parse_test err_msg env parse_utility
+# LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset\
+			ft_strlcpy ft_isspace ft_substr ft_putchar_fd ft_putstr_fd ft_putendl_fd\
+			ft_isprint
+
 
 OBJS	= $(FIL:.c=.o)
 INCS	= -I./includes
-LIBS	= -L./lib -lreadline -ltermcap -lhistory
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LIBS =  -L./lib/linux -lreadline -ltermcap -lhistory
+else
+	LIBS =  -L./lib -lreadline -ltermcap -lhistory
+endif
 
 FIL		= \
 		$(addsuffix .c, $(addprefix srcs/, $(SRCS))) \

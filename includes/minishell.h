@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/23 17:00:55 by hekang           ###   ########.fr       */
+/*   Updated: 2021/07/29 15:25:35 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void	ft_chdir(char **cmd);
 void	ft_echo(char **cmd);
 void	ft_pwd();
 
-
+void	delete_split_strs(char **str);
+void	skip_space(const char **str);
+int		is_redirect_sign(char c);
+int		is_quote(char c);
+int		is_hyphen(char c);
 
 #endif
