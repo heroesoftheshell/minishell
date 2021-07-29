@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/29 15:25:35 by ghong            ###   ########.fr       */
+/*   Updated: 2021/07/29 21:44:47 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ void	skip_space(const char **str);
 int		is_redirect_sign(char c);
 int		is_quote(char c);
 int		is_hyphen(char c);
+void	skip_quote(char const *s, size_t *str_idx, size_t *word_len);
+char	**cmdline_split(char const *s, char *delimeter);
 
 #endif

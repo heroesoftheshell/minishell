@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/29 15:10:35 by ghong            ###   ########.fr       */
+/*   Updated: 2021/07/29 21:52:28 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,11 @@ char	**line_parse(const char *line)
 	if (*line == '|')
 	{
 		print_err_msg(PIPE_SYNTAX_ERR, "|", 0);
-		free((void *)line);
-		exit(258);
+		return (NULL);
 	}
-	// FIXME: parser should consider pipe sign in quote
-	pipe_cmd_chunk = ft_split(line, '|');
+	pipe_cmd_chunk = cmdline_split(line, "|");
 	str_index = 0;
-	while (pipe_cmd_chunk[str_index])
+	while (pipe_cmd_chunk && pipe_cmd_chunk[str_index])
 	{
 		if (validate_cmd_chunk(pipe_cmd_chunk[str_index]) != SUCCESS)
 		{
@@ -114,11 +112,6 @@ char	**line_parse(const char *line)
 	}
 	return (pipe_cmd_chunk);
 }
-
-// int		set_parse_data(const char *chunk, char **alloc_space, int curr_parse_order)
-// {
-// 	return (SUCCESS);
-// }
 
 char	*conv_env_var(const char **src)
 {
@@ -365,6 +358,10 @@ char	**cmd_chunk_parse(const char *chunk)
 	return (parsed_data);
 }
 
+// char	*handle_quote(const char * line)
+// {
+// 	char	*quote_replaced_str;
+// }
 
 int 	main()
 {
@@ -376,9 +373,14 @@ int 	main()
 	while (1)
 	{
 		line = readline("hosh$ ");
+		if (*line == '\0')
+		{
+			free(line);
+			continue;
+		}
 		cmd_chunks = line_parse((const char *)line);
 		chunk_idx = 0;
-		while (cmd_chunks[chunk_idx] != NULL)
+		while (cmd_chunks && cmd_chunks[chunk_idx] != NULL)
 		{
 			// printf("%s\n", cmd_chunks[chunk_idx]);
 			parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
@@ -394,6 +396,8 @@ int 	main()
 			delete_split_strs(parsed_chunk_data);
 			chunk_idx++;
 		}
+		// FIXME: move after space check
+		add_history(line);
 		free(line);
 	}
 }

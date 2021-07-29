@@ -1,53 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_utility.c                                    :+:      :+:    :+:   */
+/*   cmdline_split_util.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/27 15:12:25 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/29 21:57:01 by ghong            ###   ########.fr       */
+/*   Created: 2021/07/29 21:20:43 by ghong             #+#    #+#             */
+/*   Updated: 2021/07/29 21:44:35 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	delete_split_strs(char **str)
+void	skip_quote(char const *s, size_t *str_idx, size_t *word_len)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	if (is_quote(s[*str_idx]))
 	{
-		free(str[i]);
-		i++;
+		(*str_idx)++;
+		if (word_len)
+			(*word_len)++;
+		while (s[*str_idx] != '\0' && !is_quote(s[*str_idx]))
+		{
+			(*str_idx)++;
+			if (word_len)
+				(*word_len)++;
+		}
 	}
-	free(str);
-}
-
-void	skip_space(const char **str)
-{
-	while (ft_isspace(**str))
-		(*str)++;
-}
-
-int		is_redirect_sign(char c)
-{
-	if (c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-
-int		is_quote(char c)
-{
-	if (c == '"' || c == '\'')
-		return (1);
-	return (0);
-}
-
-int		is_hyphen(char c)
-{
-	if (c == '-')
-		return (1);
-	return (0);
 }
