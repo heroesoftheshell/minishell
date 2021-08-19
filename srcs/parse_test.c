@@ -309,21 +309,31 @@ char	*parse_quote_str(const char **src, char quote_char)
 
 // }
 
+// char	*parse_cmd(const char **str)
+// {
+// 	while (**str)
+// 	{
+// 		if (is_redirect_sign(**str))
+// 			skip_redirect(str);
+// 		else if (is_quote(**str))
+			
+// 		(*str)++;
+// 	}
+// }
+
 char	**cmd_chunk_parse(const char *chunk)
 {
 	// validate
 	// 1. command path or name
 	// 2. command arg
 	// 3. redirect file exist
-	char	**parsed_data;
+	char	**splitted_data;
 	char	*str_for_test;
 	// int		curr_parse_order;
 
-	parsed_data = (char **)ft_calloc(4, sizeof(char *));
 	// curr_parse_order = COMMAND;
-	if (parsed_data == NULL)
-		return (NULL);
 	skip_space(&chunk);
+	splitted_data = cmdline_split(chunk, " ");
 	while (*chunk)
 	{
 		// printf("%c\n", *chunk);
@@ -355,7 +365,7 @@ char	**cmd_chunk_parse(const char *chunk)
 		//TODO: parse command or arg
 		chunk++;
 	}
-	return (parsed_data);
+	return (splitted_data);
 }
 
 // char	*handle_quote(const char * line)
@@ -369,6 +379,7 @@ int 	main()
 	char	**cmd_chunks;
 	char	**parsed_chunk_data;
 	int		chunk_idx;
+	int		p_idx;
 
 	while (1)
 	{
@@ -389,6 +400,11 @@ int 	main()
 				// perror("hosh: ");
 				delete_split_strs(cmd_chunks);
 				break ;
+			}
+			p_idx = -1;
+			while (parsed_chunk_data[++p_idx])
+			{
+				printf("%s\n", parsed_chunk_data[p_idx]);
 			}
 			// TODO: process excute
 			// ex 1) exec_func(const char ** parsed_chunk_data, char *envp);
