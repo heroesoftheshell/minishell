@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/29 21:44:47 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/19 15:14:39 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ enum	e_parsed_data_order
 	REDIRECT
 };
 
+typedef struct	s_all
+{
+	t_list	*envp;
+	t_list	**start_envp;
+}				t_all;
+
 void	print_err_msg(int err_type, const char *str, char c);
 void	print_system_err(const char *str);
 
@@ -79,5 +85,11 @@ int		is_quote(char c);
 int		is_hyphen(char c);
 void	skip_quote(char const *s, size_t *str_idx, size_t *word_len);
 char	**cmdline_split(char const *s, char *delimeter);
+t_all	*all(void);
+
+void	ft_env(void);
+void	init_env(char **envp);
+
+
 
 #endif
