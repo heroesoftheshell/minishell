@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/07/27 14:37:53 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/19 14:32:32 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void catch_function(int signo) {
 	rl_redisplay();
 }
 
-int			main(void)
+int			main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	// char	**line;
@@ -55,6 +55,12 @@ int			main(void)
 	// int		pipefd1[2];
 	// int		pipefd2[2];
 	pid_t	pid;
+
+	(void)argc;
+	(void)argv;
+
+	init_env(envp);
+
 
 	rl_bind_key('\t', rl_complete);
 	// printf("PATH : %s", get_env_path());

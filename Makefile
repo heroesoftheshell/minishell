@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ghong <ghong@student.42.fr>                +#+  +:+       +#+         #
+#    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/07/29 21:57:16 by ghong            ###   ########.fr        #
+#    Updated: 2021/08/19 16:16:25 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,9 @@ NAME	= minishell
 GCCFLAG = -Wall -Werror -Wextra
 RM 		= rm -f
 
-SRCS	= main env cmd ft_chdir ft_echo ft_pwd 
-LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy
+SRCS	= main env cmd ft_chdir ft_echo ft_pwd all
+LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy ft_lstnew ft_lstadd_back\
+		ft_lstlast ft_putendl_fd
 # SRCS	= parse_test err_msg env parse_utility cmdline_split cmdline_split_util
 # LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset\
 			ft_strlcpy ft_isspace ft_substr ft_putchar_fd ft_putstr_fd ft_putendl_fd\
