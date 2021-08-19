@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/19 16:42:58 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/19 21:41:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,8 @@ void		run_cmd(char *cmd)
 		ft_echo(chunk);
 	if (!ft_strcmp(chunk[0], "pwd"))
 		ft_pwd();
-	// if (!ft_strcmp(chunk[0], "export"))
-	// 	ft_export(chunk);
-
+	if (!ft_strcmp(chunk[0], "export"))
+		ft_export(chunk);
 	if (!ft_strcmp(chunk[0], "env"))
 	 	ft_env();
 

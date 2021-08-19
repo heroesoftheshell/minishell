@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/19 15:14:39 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/19 17:04:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ t_all	*all(void);
 
 void	ft_env(void);
 void	init_env(char **envp);
-
-
+void	ft_export(char **cmd);
 
 #endif
