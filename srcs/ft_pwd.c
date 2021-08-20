@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:36:22 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/19 16:40:48 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 09:51:18 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,5 @@ void	ft_pwd()
 	getcwd(buf, 255);
 	write(STDOUT_FILENO, buf, ft_strlen(buf));
 	write(STDOUT_FILENO, "\n", 1);
-	exit(0);
+	// exit(0);
 }

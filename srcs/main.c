@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/19 14:32:32 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 10:46:24 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int			main(int argc, char **argv, char **envp)
 	// int		cnt;
 	// int		pipefd1[2];
 	// int		pipefd2[2];
-	pid_t	pid;
+	// pid_t	pid;
 
 	(void)argc;
 	(void)argv;
@@ -76,17 +76,13 @@ int			main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			return (0);
 		}
-		// if (input != NULL)
-		// {
 		else
 		{
 			rl_on_new_line();
-			pid = fork();
-			waitpid(0, 0, 0);
-			if (pid == 0)
-				run_cmd(input);
-
-		// }
+			// pid = fork();
+			// waitpid(0, 0, 0);
+			// if (pid == 0)
+			run_cmd(input);
 	// 	line = ft_split(input, '|');
 	// 	cnt = 0;
 	// 	pipe(pipefd1);
@@ -118,7 +114,6 @@ int			main(int argc, char **argv, char **envp)
 		add_history(input);
 		free(input);
 		}
-
 	}
 	return 0;
 }
