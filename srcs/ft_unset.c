@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 10:46:07 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 12:22:01 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,6 @@ void	print_unset_error(char *key)
 	free(temp);
 	ft_putendl_fd(msg, STDERR_FILENO);
 	free(msg);
-}
-
-int		validate_env_key(char* key)
-{
-	int	cnt;
-
-	cnt = 0;
-	if (ft_isalpha(key[0]) || key[0] == '_')
-	{
-		while (key[++cnt])
-		{
-			if (!(ft_isalpha(key[cnt]) || ft_isdigit(key[cnt]) || key[cnt] == '_'))
-				return (0);
-		}
-		return (1);
-	}
-	return (0);
 }
 
 int		del_unset_key(char* key)

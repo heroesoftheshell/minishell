@@ -6,11 +6,23 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 16:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 09:47:46 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 12:21:08 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_export_error(char *key)
+{
+	char	*temp;
+	char	*msg;
+
+	temp = ft_strjoin("\033[1;4;34;47mHOS\033[0m: export: `", key);
+	msg = ft_strjoin(temp, "': not a valid identifier");
+	free(temp);
+	ft_putendl_fd(msg, STDERR_FILENO);
+	free(msg);
+}
 
 void	print_declare(char *str)
 {
@@ -66,7 +78,10 @@ void	ft_export(char **cmd)
 	}
 	else
 	{
-		ft_lstadd_back(&(all()->envp), ft_lstnew(cmd[1]));
+		if (!validate_env_key(cmd[1]))
+			print_export_error(cmd[1]);
+		else
+			ft_lstadd_back(&(all()->envp), ft_lstnew(cmd[1]));
 	}
 	// exit(1);
 }
