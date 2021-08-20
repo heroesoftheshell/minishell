@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 12:22:01 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 14:59:32 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		del_unset_key(char* key)
 	return (0);
 }
 
-int			ft_unset(char **cmd)
+void		ft_unset(char **cmd)
 {
 	int		ret;
 
@@ -61,5 +61,5 @@ int			ft_unset(char **cmd)
 	if (!validate_env_key(cmd[1]))
 		print_unset_error(cmd[1]);
 	del_unset_key(cmd[1]);
-	return (0);
+	all()->end_code = 0;
 }

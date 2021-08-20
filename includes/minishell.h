@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 12:19:21 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:04:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ enum	e_parsed_data_order
 typedef struct	s_all
 {
 	t_list	*envp;
-	t_list	**start_envp;
+	int		end_code;
 }				t_all;
 
 void	print_err_msg(int err_type, const char *str, char c);
@@ -90,8 +90,10 @@ t_all	*all(void);
 void	ft_env(void);
 void	init_env(char **envp);
 void	ft_export(char **cmd);
-int		ft_unset(char **cmd);
+void		ft_unset(char **cmd);
 int		validate_env_key(char* key);
+void	ft_print_endcode(void);
+
 
 
 #endif
