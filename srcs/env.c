@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/19 17:09:17 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 09:46:53 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_env(void)
 		// write(STDOUT_FILENO, (char *)(temp->content), )
 		temp = temp->next;
 	}
-	exit(0);
+	// exit(0);
 }
 
 char	*get_env_path(void)

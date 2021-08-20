@@ -6,7 +6,7 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/08/19 17:22:27 by hekang           ###   ########.fr        #
+#    Updated: 2021/08/20 10:44:21 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ NAME	= minishell
 GCCFLAG = -Wall -Werror -Wextra
 RM 		= rm -f
 
-SRCS	= main env cmd ft_chdir ft_echo ft_pwd all ft_export
+SRCS	= main env cmd ft_chdir ft_echo ft_pwd all ft_export ft_unset
 LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy ft_lstnew ft_lstadd_back\
-		ft_lstlast ft_putendl_fd ft_lstsize
+		ft_lstlast ft_putendl_fd ft_lstsize ft_strdup ft_isalpha ft_isdigit
 # SRCS	= parse_test err_msg env parse_utility cmdline_split cmdline_split_util
 # LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset\
 			ft_strlcpy ft_isspace ft_substr ft_putchar_fd ft_putstr_fd ft_putendl_fd\
