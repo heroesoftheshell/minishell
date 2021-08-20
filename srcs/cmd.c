@@ -6,11 +6,18 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 15:33:31 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 16:42:29 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void		ft_print_cmd_error(char *cmd)
+{
+	ft_putstr_fd("\033[1;4;34;47mHOS\033[0m: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+}
 
 void		run_cmd(char **chunk)
 {
@@ -56,7 +63,7 @@ void		run_cmd(char **chunk)
 		while (split_path[++cnt])
 			execve(ft_strjoin(split_path[cnt], chunk[0]), chunk, (char *const *)(all()->envp));
 		execve(chunk[0], chunk, (char *const *)(all()->envp));
-		perror(chunk[0]);
+		ft_print_cmd_error(chunk[0]);
 	}
 	
 }
