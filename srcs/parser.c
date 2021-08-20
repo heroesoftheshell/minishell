@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		validate_redirect_expression(const char **str, char start_c)
+static int	validate_redirect_expression(const char **str, char start_c)
 {
 	bool	contain_space;
 
@@ -72,7 +72,7 @@ int		validate_redirect_expression(const char **str, char start_c)
 	return (SUCCESS);
 }
 
-int		validate_cmd_chunk(const char *chunk)
+static int	validate_cmd_chunk(const char *chunk)
 {
 	int		err_chk;
 
@@ -89,7 +89,7 @@ int		validate_cmd_chunk(const char *chunk)
 	return (SUCCESS);
 }
 
-char	**line_parse(const char *line)
+char		**line_parse(const char *line)
 {
 	char	**pipe_cmd_chunk;
 	int		str_index;
@@ -113,7 +113,7 @@ char	**line_parse(const char *line)
 	return (pipe_cmd_chunk);
 }
 
-char	*conv_env_var(const char **src)
+static char	*conv_env_var(const char **src)
 {
 	const char	*src_start;
 	char		*env_key;
@@ -144,7 +144,7 @@ char	*conv_env_var(const char **src)
 	return (NULL);
 }
 
-char	*parse_quote_str(const char **src, char quote_char)
+static char	*parse_quote_str(const char **src, char quote_char)
 {
 	char		*value;
 	const char	*src_start;
@@ -321,7 +321,7 @@ char	*parse_quote_str(const char **src, char quote_char)
 // 	}
 // }
 
-char	**cmd_chunk_parse(const char *chunk)
+char		**cmd_chunk_parse(const char *chunk)
 {
 	// validate
 	// 1. command path or name
@@ -346,7 +346,7 @@ char	**cmd_chunk_parse(const char *chunk)
 				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 				return (NULL);
 			}
-			printf("%s", str_for_test);
+			// printf("%s", str_for_test);
 		}
 		else if (is_hyphen(*chunk))
 		{
@@ -377,47 +377,3 @@ char	**cmd_chunk_parse(const char *chunk)
 // parsed_chunk_data[1] : cmd name
 // parsed_chunk_data[2] : opt or arg
 // parsed_chunk_data[~] : args
-int 	main()
-{
-	char	*line;
-	char	**cmd_chunks;
-	char	**parsed_chunk_data;
-	int		chunk_idx;
-	int		p_idx;
-
-	while (1)
-	{
-		line = readline("hosh$ ");
-		if (*line == '\0')
-		{
-			free(line);
-			continue;
-		}
-		cmd_chunks = line_parse((const char *)line);
-		chunk_idx = 0;
-		while (cmd_chunks && cmd_chunks[chunk_idx] != NULL)
-		{
-			// printf("%s\n", cmd_chunks[chunk_idx]);
-			parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
-			if (parsed_chunk_data == NULL)
-			{
-				// perror("hosh: ");
-				delete_split_strs(cmd_chunks);
-				break ;
-			}
-			p_idx = -1;
-			while (parsed_chunk_data[++p_idx])
-			{
-				printf("%s\n", parsed_chunk_data[p_idx]);
-			}
-			// TODO: process excute
-			// ex 1) exec_func(const char ** parsed_chunk_data, char *envp);
-			// ex 2) exec_func(const char *cmd, const char *arg, const char *redir, char *envp)
-			delete_split_strs(parsed_chunk_data);
-			chunk_idx++;
-		}
-		// FIXME: move after space check
-		add_history(line);
-		free(line);
-	}
-}

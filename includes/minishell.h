@@ -73,7 +73,7 @@ void	print_system_err(const char *str);
 
 char	*get_env_path(void);
 char	*get_env_variable(const char *env_key);
-void	run_cmd(char *cmd);
+void	run_cmd(char **chunk);
 void	ft_chdir(char **cmd);
 void	ft_echo(char **cmd);
 void	ft_pwd();
@@ -94,6 +94,7 @@ void		ft_unset(char **cmd);
 int		validate_env_key(char* key);
 void	ft_print_endcode(void);
 
-
+char	**line_parse(const char *line);
+char	**cmd_chunk_parse(const char *chunk);
 
 #endif
