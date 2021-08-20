@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 10:17:04 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:03:54 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void		run_cmd(char *cmd)
 		ft_export(chunk);
 	else if (!ft_strcmp(chunk[0], "env"))
 		ft_env();
-	else if (!ft_strcmp(chunk[0], "env"))
-		ft_env();
 	else if (!ft_strcmp(chunk[0], "unset"))
 		ft_unset(chunk);
+	else if (!ft_strcmp(chunk[0], "$?"))
+		ft_print_endcode();
 	else 
 	{
 		path = get_env_path();

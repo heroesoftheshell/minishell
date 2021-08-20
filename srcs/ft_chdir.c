@@ -6,13 +6,13 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:13:43 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 09:51:09 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:00:36 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_chdir(char **cmd)
+void		ft_chdir(char **cmd)
 {
 	char	*pwd;
 	pwd = get_env_variable("PWD");
@@ -21,5 +21,5 @@ void	ft_chdir(char **cmd)
 	int n = chdir(ft_strjoin(pwd, cmd[1]));
 	printf("chdir : %s\n", ft_strjoin(pwd, cmd[1]));
 	printf("chdir n : %d\n", n);
-	// exit(0);
+	all()->end_code = 0;
 }
