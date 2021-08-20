@@ -12,24 +12,24 @@
 
 #include "minishell.h"
 
-void		run_cmd(char *cmd)
+void		run_cmd(char **chunk)
 {
 	char		*path;
 	char		**split_path;
 	int			cnt;
 	// extern char	**environ;
-	char 		**chunk;
-	char		**line;
+	// char 		**chunk;
+	// char		**line;
 	// pid_t		pids[128];
 
-	line = ft_split(cmd, '|');
+	// line = ft_split(cmd, '|');
 	cnt = -1;
 	// while (++cnt < ft_strlen(line))
 	// {
 	// 	fork();
 	// 	wait(NULL);
 	// }
-	chunk = ft_split(cmd, ' ');
+	// chunk = ft_split(cmd, ' ');
 	if (!ft_strcmp(chunk[0], "cd"))
 		ft_chdir(chunk);
 	else if (!ft_strcmp(chunk[0], "echo"))

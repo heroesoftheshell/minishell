@@ -55,6 +55,10 @@ int			main(int argc, char **argv, char **envp)
 	// int		pipefd1[2];
 	// int		pipefd2[2];
 	// pid_t	pid;
+	char	**cmd_chunks;
+	char	**parsed_chunk_data;
+	int		chunk_idx;
+	int		p_idx;
 
 	(void)argc;
 	(void)argv;
@@ -69,20 +73,44 @@ int			main(int argc, char **argv, char **envp)
 	while (1)
 	{
         input = readline("\033[1;4;34;47mHOS >\033[0m ");
-		if (input == NULL)
+		if (input == NULL || *input == '\0')
 		{
 			rl_replace_line("", 0);
 			// rl_redisplay();	
 			printf("exit\n");
+			free(input);
 			return (0);
 		}
 		else
 		{
 			rl_on_new_line();
+			cmd_chunks = line_parse((const char *)input);
+			chunk_idx = 0;
+			while (cmd_chunks && cmd_chunks[chunk_idx] != NULL)
+			{
+				// printf("%s\n", cmd_chunks[chunk_idx]);
+				parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
+				if (parsed_chunk_data == NULL)
+				{
+					// perror("hosh: ");
+					delete_split_strs(cmd_chunks);
+					break ;
+				}
+				p_idx = -1;
+				// while (parsed_chunk_data[++p_idx])
+				// {
+				// 	printf("%s\n", parsed_chunk_data[p_idx]);
+				// }
+				run_cmd(parsed_chunk_data);
+				// TODO: process excute
+				// ex 1) exec_func(const char ** parsed_chunk_data, char *envp);
+				// ex 2) exec_func(const char *cmd, const char *arg, const char *redir, char *envp)
+				delete_split_strs(parsed_chunk_data);
+				chunk_idx++;
+			}
 			// pid = fork();
 			// waitpid(0, 0, 0);
 			// if (pid == 0)
-			run_cmd(input);
 	// 	line = ft_split(input, '|');
 	// 	cnt = 0;
 	// 	pipe(pipefd1);
