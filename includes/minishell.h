@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 15:04:14 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:31:01 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	ft_export(char **cmd);
 void		ft_unset(char **cmd);
 int		validate_env_key(char* key);
 void	ft_print_endcode(void);
+void	ft_exit(char *exit_code);
 
 char	**line_parse(const char *line);
 char	**cmd_chunk_parse(const char *chunk);

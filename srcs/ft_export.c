@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 16:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 12:21:08 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:31:30 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,5 @@ void	ft_export(char **cmd)
 		else
 			ft_lstadd_back(&(all()->envp), ft_lstnew(cmd[1]));
 	}
-	// exit(1);
+	all()->end_code = 0;
 }
