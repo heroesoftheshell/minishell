@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 14:59:32 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 17:31:47 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		del_unset_key(char* key)
 	t_list		*prev;
 
 	current = all()->envp;
-
 	while (current)
 	{
 		split = ft_split(current->content, '=');
@@ -55,11 +54,16 @@ int		del_unset_key(char* key)
 void		ft_unset(char **cmd)
 {
 	int		ret;
+	int		cnt;
 
+	cnt = 0;
 	ret = 0;
 
-	if (!validate_env_key(cmd[1]))
-		print_unset_error(cmd[1]);
-	del_unset_key(cmd[1]);
+	while (cmd[++cnt])
+	{
+		if (!validate_env_key(cmd[cnt], 1))
+			print_unset_error(cmd[cnt]);
+		del_unset_key(cmd[cnt]);
+	}
 	all()->end_code = 0;
 }

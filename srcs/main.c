@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 11:59:20 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 16:42:38 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int			main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	init_env(envp);
-
-
 	rl_bind_key('\t', rl_complete);
 	// printf("PATH : %s", get_env_path());
 	signal(SIGINT, catch_function);
