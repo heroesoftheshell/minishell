@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/22 05:49:34 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/23 08:45:41 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 		if (src[str_idx][*char_idx] == '$' && quote_char == '"')
 		{
 			env_value = conv_env_var(src, str_idx, char_idx);
-			printf("env_value : %s\n", env_value);
+			// printf("env_value : %s\n", env_value);
 			if (env_value != NULL)
 			{
 				if (value == NULL)
@@ -267,7 +267,7 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 					char_idx - start_idx);
 			converted_str = parse_quote_str((const char **)splitted_data,\
 				splitted_data[str_idx][char_idx], str_idx, &char_idx);
-			printf("parse_quote_str : %s\n", converted_str);
+			// printf("parse_quote_str : %s\n", converted_str);
 			start_idx = char_idx + 1;
 			if (converted_str == NULL)
 			{
@@ -360,11 +360,6 @@ char		**cmd_chunk_parse(const char *chunk)
 	}
 	return (splitted_data);
 }
-
-// char	*handle_quote(const char * line)
-// {
-// 	char	*quote_replaced_str;
-// }
 
 // parsed_chunk_data[0] : redirection set
 // parsed_chunk_data[1] : cmd name

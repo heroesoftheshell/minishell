@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 21:00:26 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/29 21:47:15 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/23 08:41:23 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static size_t	count_word(char	const *s, char *delimeter)
 	count = 0;
 	while (s[i])
 	{
-		while (is_delimiter(s[i], delimeter))
+		while (s[i] != '\0' && is_delimiter(s[i], delimeter))
 			i++;
 		if (s[i] == '\0')
 			return (count);
@@ -72,7 +72,7 @@ static int		insert_words(char **arr, char const *s, char *c)
 	word_len = 0;
 	while (s[i])
 	{
-		while (is_delimiter(s[i], c))
+		while (s[i] != '\0' && is_delimiter(s[i], c))
 			i++;
 		if (s[i] == '\0')
 			return (1);
