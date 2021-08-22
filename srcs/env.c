@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 09:46:53 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 16:53:09 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ void	ft_env(void)
 	while (temp)
 	{
 	// printf("%s\n", (char *)(temp->content));
-		ft_putendl_fd((char *)(temp->content), STDOUT_FILENO);
+	// printf("strnstr: %s\n", ft_strnstr((char *)temp->content, "=", ft_strlen((char *)temp->content)));
+		if (ft_strnstr((char *)temp->content, "=", ft_strlen((char *)temp->content)))
+			ft_putendl_fd((char *)(temp->content), STDOUT_FILENO);
 		// write(STDOUT_FILENO, (char *)(temp->content), )
 		temp = temp->next;
 	}

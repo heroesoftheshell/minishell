@@ -6,11 +6,50 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 16:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 12:21:08 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 17:28:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int			check_env_key(char *cmd)
+{
+	t_list	*temp;
+	int		cnt;
+	char	**split;
+	char	*value;
+	char	*key;
+
+	cnt = 0;
+	value = 0;
+	temp = all()->envp;
+	split = ft_split(cmd, '=');
+	if (!(split[1] == NULL))
+	{
+		key = strdup(split[0]);
+		value = strdup(split[1]);
+	}
+	else
+		key = strdup(cmd);
+	free(split);
+	while (cnt < ft_lstsize(all()->envp))
+	{
+		split = ft_split(temp->content, '=');
+		if (!ft_strcmp(split[0], key))
+		{
+			if (value)
+			{
+				free(temp->content);
+				temp->content = ft_strjoin3(key , "=",value);
+			}
+			return (1);
+		}
+		cnt++;
+		temp = temp->next;
+		free(split);
+	}
+	return (0);
+}
 
 void	print_export_error(char *key)
 {
@@ -72,16 +111,27 @@ void	export_declare(void)
 
 void	ft_export(char **cmd)
 {
+	int	cnt;
+
+	cnt = 0;
 	if (cmd[1] == NULL)
 	{
 		export_declare();
 	}
 	else
 	{
-		if (!validate_env_key(cmd[1]))
-			print_export_error(cmd[1]);
-		else
-			ft_lstadd_back(&(all()->envp), ft_lstnew(cmd[1]));
+		while (cmd[++cnt])
+		{
+
+			if (!validate_env_key(cmd[cnt], 0))
+				print_export_error(cmd[cnt]);
+			else
+			{
+				if (!check_env_key(cmd[cnt]))
+					ft_lstadd_back(&(all()->envp), ft_lstnew(ft_strdup(cmd[cnt])));
+			}
+		}
+
 	}
-	// exit(1);
+	all()->end_code = 0;
 }

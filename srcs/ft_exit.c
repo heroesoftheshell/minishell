@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/19 15:36:22 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 15:45:29 by hekang           ###   ########.fr       */
+/*   Created: 2021/08/20 15:27:17 by hekang            #+#    #+#             */
+/*   Updated: 2021/08/20 15:32:50 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pwd()
+void	ft_exit(char *exit_code)
 {
-	char	buf[255];
-	
-	getcwd(buf, 255);
-	write(STDOUT_FILENO, buf, ft_strlen(buf));
-	write(STDOUT_FILENO, "\n", 1);
-	all()->end_code = 0;
+	int	code;
+
+	code = 0;
+	if (exit_code)
+		code = ft_atoi(exit_code);
+	all()->end_code = code;
+	exit(code);
 }

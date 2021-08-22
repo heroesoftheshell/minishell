@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:33:00 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 09:51:14 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/20 15:31:31 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ void	ft_echo(char **cmd)
 	}
 	if (strcmp(cmd[1], "-n"))
 		write(STDOUT_FILENO, "\n", 1);
-	// exit(0);
+	all()->end_code = 0;
 }
