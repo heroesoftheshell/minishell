@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_test.c                                       :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/29 21:52:28 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/22 05:49:34 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,65 +113,74 @@ char		**line_parse(const char *line)
 	return (pipe_cmd_chunk);
 }
 
-static char	*conv_env_var(const char **src)
+static char	*conv_env_var(const char **src, int str_idx, int *char_idx)
 {
-	const char	*src_start;
-	char		*env_key;
-	char		*env_value;
-	size_t		str_len;
+	// const char	*src_start;
+	char			*env_key;
+	char			*env_value;
+	size_t			str_len;
+	unsigned int	start_char_idx;
 
-	(*src)++;
-	src_start = *src;
+	// (*src)++;
+	// src_start = *src;
+	start_char_idx = *char_idx + 1;
 	str_len = 0;
-	while (**src)
+	while (src[str_idx][++(*char_idx)])
 	{
-		if (**src == '"' || ft_isspace(**src))
+		if (src[str_idx][*char_idx] == '"' ||\
+			ft_isspace(src[str_idx][*char_idx]))
 		{
-			env_key = ft_substr(src_start, 0, str_len);
+			if (str_len == 0)
+				return (ft_strdup("$"));
+			env_key = ft_substr(src[str_idx], start_char_idx, str_len);
 			env_value = get_env_variable((const char *)env_key);
 			if (env_key)
 				free(env_key);
 			return (env_value);
 		}
-		else if (**src == '\0')
+		else if (src[str_idx][*char_idx] == '\0')
 		{
 			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 			return (NULL);
 		}
 		str_len++;
-		(*src)++;
+		// (*src)++;
 	}
 	return (NULL);
 }
 
-static char	*parse_quote_str(const char **src, char quote_char)
+static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
+				int *char_idx)
 {
-	char		*value;
-	const char	*src_start;
-	char		*env_value;
-	char		*temp;
-	char		*substr;
-	int			str_len;
+	char			*value;
+	// const char	*src_start;
+	char			*env_value;
+	char			*temp;
+	char			*substr;
+	int				str_len;
+	unsigned int	start_char_idx;
 
 	value = NULL;
-	(*src)++;
-	src_start = *src;
+	// (*src)++;
+	// src_start = *src;
+	start_char_idx = *char_idx + 1;
 	str_len = 0;
-	while (**src)
+	while (src[str_idx][++(*char_idx)])
 	{
-		if (**src == '$' && quote_char == '"')
+		if (src[str_idx][*char_idx] == '$' && quote_char == '"')
 		{
-			env_value = conv_env_var(src);
+			env_value = conv_env_var(src, str_idx, char_idx);
+			printf("env_value : %s\n", env_value);
 			if (env_value != NULL)
 			{
 				if (value == NULL)
 				{
-					value = ft_substr(src_start, 0, str_len);
+					value = ft_substr(src[str_idx], start_char_idx, str_len);
 					temp = ft_strjoin(value, env_value);
 				}
 				else
 				{
-					substr = ft_substr(src_start, 0, str_len);
+					substr = ft_substr(src[str_idx], start_char_idx, str_len);
 					temp = ft_strjoin(value, substr);
 					free(value);
 					free(substr);
@@ -181,24 +190,25 @@ static char	*parse_quote_str(const char **src, char quote_char)
 				free(value);
 				value = temp;
 				// free(env_value);
-				src_start = *src;
-				str_len = 0;
+				// src_start = *src;
 			}
-			if (**src == '\0')
+			start_char_idx = *char_idx;
+			str_len = 0;
+			if (src[str_idx][*char_idx] == '\0')
 				return (NULL);
 		}
-		if (**src == '\0')
+		if (src[str_idx][*char_idx] == '\0')
 		{
 			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 			return (NULL);
 		}
-		else if (**src == quote_char)
+		else if (src[str_idx][*char_idx] == quote_char)
 		{
 			if (value == NULL)
-				value = ft_substr(src_start, 0, str_len);
+				value = ft_substr(src[str_idx], start_char_idx, str_len);
 			else
 			{
-				substr = ft_substr(src_start, 0, str_len);
+				substr = ft_substr(src[str_idx], start_char_idx, str_len);
 				temp = ft_strjoin(value, substr);
 				free(value);
 				free(substr);
@@ -207,7 +217,7 @@ static char	*parse_quote_str(const char **src, char quote_char)
 			return (value);
 		}
 		str_len++;
-		(*src)++;
+		// (*src)++;
 	}
 	return (NULL);
 }
@@ -225,101 +235,107 @@ static char	*parse_quote_str(const char **src, char quote_char)
 // 	return (0);
 // }
 
-// int		parse_cmd(const char **str, char **parsed_datas)
-// {
-// 	const char	*src_start;
-// 	char		*quote_str;
-// 	char		*substr;
-// 	char		*temp;
-// 	int			str_len;
-
-// 	src_start = *str;
-// 	quote_str = NULL;
-// 	substr = NULL;
-// 	temp = NULL;
-// 	str_len = 0;
-// 	while(**str)
-// 	{
-// 		if (is_redirect_sign(**str))
-// 		{
-// 			parse_redirect(str, parsed_datas);
-// 			if (str_len > 0)
-// 				parsed_datas[COMMAND] = ft_substr(src_start, 0, str_len);
-// 			else if (str_len == 0)
-// 			{
-// 				src_start = *str;
-// 				str_len = 0;
-// 			}
-// 			continue;
-// 		}
-// 		else if (is_quote(**str))
-// 		{
-// 			quote_str = parse_quote_str(str, **str);
-// 			if (str_len > 0)
-// 			{
-// 				substr = ft_substr(src_start, 0, str_len);
-// 				if (parsed_datas[COMMAND] == NULL)
-// 					parsed_datas[COMMAND] = ft_strjoin(substr, quote_str);
-// 				else
-// 				{
-// 					ft_strjoin(temp, substr);
-// 				}
-// 				free(substr);
-// 				free(quote_str);
-// 				substr = NULL;
-// 				quote_str = NULL;
-// 				src_start = *str;
-// 				str_len = 0;
-// 				continue;
-// 			}
-// 		}
-// 		else if (ft_isspace(**str))
-// 		{
-
-// 		}
-// 		(*str)++;
-// 		str_len++;
-// 	}
-// 	if (**str == '\0' && str_len > 0)
-// 	{
-// 		if (temp)
-// 		{
-
-// 		}
-// 		else
-// 		{
-
-// 		}
-// 	}
-// }
-
-// char	*parse_option(const char **chunk, char **parsed_datas)
-// {
-
-// }
-
-// char	**parse_argv(const char **chunk, char **parsed_datas)
-// {
-
-// }
-
 // // TODO : parse redirect file name and skip space after file name
 // char	**parse_redirect(const char **chunk, char **parsed_datas)
 // {
 
 // }
 
-// char	*parse_cmd(const char **str)
-// {
-// 	while (**str)
-// 	{
-// 		if (is_redirect_sign(**str))
-// 			skip_redirect(str);
-// 		else if (is_quote(**str))
-			
-// 		(*str)++;
-// 	}
-// }
+int			switch_str_to_handled_quote_str(char **splitted_data,\
+				int str_idx)
+{
+	// FIXME: string variables should change structure type
+	char	*converted_str;
+	char	*prev_str;
+	char	*next_str;
+	char	*joined_str;
+	char	*tmp_str;
+	int		start_idx;
+	int		char_idx;
+
+	converted_str = NULL;
+	prev_str = NULL;
+	joined_str = NULL;
+	start_idx = 0;
+	char_idx = -1;
+	while (splitted_data[str_idx][++char_idx])
+	{
+		if (is_quote(splitted_data[str_idx][char_idx]))
+		{
+			if (char_idx - start_idx > 0)
+				prev_str = ft_substr(splitted_data[str_idx], start_idx,\
+					char_idx - start_idx);
+			converted_str = parse_quote_str((const char **)splitted_data,\
+				splitted_data[str_idx][char_idx], str_idx, &char_idx);
+			printf("parse_quote_str : %s\n", converted_str);
+			start_idx = char_idx + 1;
+			if (converted_str == NULL)
+			{
+				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+				return (QUOTE_EXIT_ERR);
+			}
+			if (prev_str)
+			{
+				if (joined_str == NULL)
+				{
+					joined_str = ft_strjoin(prev_str, converted_str);
+					free(prev_str);
+					free(converted_str);
+					prev_str = NULL;
+					converted_str = NULL;
+				}
+				else
+				{
+					tmp_str = ft_strjoin(joined_str, prev_str);
+					free(joined_str);
+					free(prev_str);
+					prev_str = NULL;
+					joined_str = tmp_str;
+					tmp_str = ft_strjoin(joined_str, converted_str);
+					free(joined_str);
+					free(converted_str);
+					converted_str = NULL;
+					joined_str = tmp_str;
+				}
+			}
+			else
+			{
+				if (joined_str == NULL)
+				{
+					joined_str = converted_str;
+				}
+				else
+				{
+					tmp_str = ft_strjoin(joined_str, converted_str);
+					free(joined_str);
+					free(converted_str);
+					converted_str = NULL;
+					joined_str = tmp_str;
+				}
+			}
+		}
+		else if (splitted_data[str_idx][char_idx] == '$')
+		{
+			//TODO
+			converted_str = conv_env_var((const char **)splitted_data, str_idx, &char_idx);
+		}
+	}
+	if (joined_str)
+	{
+		if (char_idx - start_idx > 0)
+		{
+			next_str = ft_substr(splitted_data[str_idx], start_idx,\
+						char_idx - start_idx);
+			tmp_str = ft_strjoin(joined_str, next_str);
+			free(joined_str);
+			free(next_str);
+			joined_str = tmp_str;
+		}
+		free(splitted_data[str_idx]);
+		splitted_data[str_idx] = joined_str;
+	}
+	return (SUCCESS);
+}
 
 char		**cmd_chunk_parse(const char *chunk)
 {
@@ -328,42 +344,19 @@ char		**cmd_chunk_parse(const char *chunk)
 	// 2. command arg
 	// 3. redirect file exist
 	char	**splitted_data;
-	char	*str_for_test;
+	int		sd_idx;
+	// char	**parsed_data;
 	// int		curr_parse_order;
 
 	// curr_parse_order = COMMAND;
 	skip_space(&chunk);
 	splitted_data = cmdline_split(chunk, " ");
-	while (*chunk)
+	if (splitted_data == NULL)
+		return (NULL);
+	sd_idx = -1;
+	while (splitted_data[++sd_idx])
 	{
-		// printf("%c\n", *chunk);
-		if (is_quote(*chunk))
-		{
-			// TODO: handle quote(with space)
-			str_for_test = parse_quote_str(&chunk, *chunk);
-			if (str_for_test == NULL)
-			{
-				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
-				return (NULL);
-			}
-			// printf("%s", str_for_test);
-		}
-		else if (is_hyphen(*chunk))
-		{
-			// TODO: parse option with cmd existance check
-		}
-		else if (is_redirect_sign(*chunk))
-		{
-			// TODO: join all redirects
-		}
-		else if (ft_isspace(*chunk))
-		{
-			// FIXME: arg order should not pass
-			chunk++;
-			continue;
-		}
-		//TODO: parse command or arg
-		chunk++;
+		switch_str_to_handled_quote_str(splitted_data, sd_idx);
 	}
 	return (splitted_data);
 }
