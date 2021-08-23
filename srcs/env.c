@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 16:27:43 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/23 17:32:34 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*get_env_path(void)
 		split = ft_split(current->content, '=');
 		if (!split[0])
 			return (NULL);
-		if (ft_strcmp("path", split[0]))
+		if (!ft_strcmp("PATH", split[0]))
 			return split[1];
 		current = current->next;
 	}
@@ -72,7 +72,7 @@ char	*get_env_variable(const char *env_key)
 		split = ft_split(current->content, '=');
 		if (!split[0])
 			return (NULL);
-		if (ft_strcmp(env_key, split[0]))
+		if (!ft_strcmp(env_key, split[0]))
 			return split[1];
 		current = current->next;
 	}

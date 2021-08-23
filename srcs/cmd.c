@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 12:31:12 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/23 17:32:37 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,4 @@ void		run_cmd(char **chunk)
 		ft_print_cmd_error(chunk[0]);
 		free(env);
 	}
-	
 }
