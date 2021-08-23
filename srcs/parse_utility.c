@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 15:12:25 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/29 21:57:01 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/22 04:44:40 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void	delete_split_strs(char **str)
 {
 	int	i;
 
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		free(str[i]);
-		i++;
 	}
 	free(str);
 }

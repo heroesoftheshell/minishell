@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
 /*   Updated: 2021/08/20 16:42:38 by hekang           ###   ########.fr       */
@@ -58,7 +58,7 @@ int			main(int argc, char **argv, char **envp)
 	char	**cmd_chunks;
 	char	**parsed_chunk_data;
 	int		chunk_idx;
-	int		p_idx;
+	// int		p_idx;
 
 	(void)argc;
 	(void)argv;
@@ -86,7 +86,6 @@ int			main(int argc, char **argv, char **envp)
 			chunk_idx = 0;
 			while (cmd_chunks && cmd_chunks[chunk_idx] != NULL)
 			{
-				// printf("%s\n", cmd_chunks[chunk_idx]);
 				parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
 				if (parsed_chunk_data == NULL)
 				{
@@ -94,7 +93,7 @@ int			main(int argc, char **argv, char **envp)
 					delete_split_strs(cmd_chunks);
 					break ;
 				}
-				p_idx = -1;
+				// p_idx = -1;
 				// while (parsed_chunk_data[++p_idx])
 				// {
 				// 	printf("%s\n", parsed_chunk_data[p_idx]);
@@ -106,6 +105,7 @@ int			main(int argc, char **argv, char **envp)
 				delete_split_strs(parsed_chunk_data);
 				chunk_idx++;
 			}
+			delete_split_strs(cmd_chunks);
 			// pid = fork();
 			// waitpid(0, 0, 0);
 			// if (pid == 0)

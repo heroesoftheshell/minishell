@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
+#    By: ghong <ghong@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/08/20 16:51:18 by hekang           ###   ########.fr        #
+#    Updated: 2021/08/23 08:18:13 by ghong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ $(OBJS): %.o : %.c includes/minishell.h includes/libft.h
 # 		gcc $(GCCFLAG) $(INCS) -c -o $@ $<
 
 $(NAME) : $(OBJS)
-		gcc $(GCCFLAG) $^ -o $@ $(LIBS)
+		gcc $(GCCFLAG) $^ -o $@ $(LIBS) -g -fsanitize=address
 
 clean : 
 		$(RM) $(OBJS)
