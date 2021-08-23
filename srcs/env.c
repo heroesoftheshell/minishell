@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 16:53:09 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/23 17:32:34 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ void	init_env(char **envp)
 
 	while (envp[++cnt])
 	{
-		// envp[cnt][ft_strlen(envp[cnt])] = 0;
 		if (cnt == 0)
 			all()->envp = ft_lstnew(envp[cnt]);
 		else
 			if (envp[cnt][0])
 				ft_lstadd_back(&(all()->envp), ft_lstnew(envp[cnt]));
-
 	}
 }
 
@@ -37,30 +35,46 @@ void	ft_env(void)
 	temp = (all()->envp);
 	while (temp)
 	{
-	// printf("%s\n", (char *)(temp->content));
-	// printf("strnstr: %s\n", ft_strnstr((char *)temp->content, "=", ft_strlen((char *)temp->content)));
 		if (ft_strnstr((char *)temp->content, "=", ft_strlen((char *)temp->content)))
 			ft_putendl_fd((char *)(temp->content), STDOUT_FILENO);
-		// write(STDOUT_FILENO, (char *)(temp->content), )
 		temp = temp->next;
 	}
-	// exit(0);
 }
 
 char	*get_env_path(void)
 {
-		char		*path;
+	t_list		*current;
+	char		**split;
 
-		path = getenv("PATH");
-		return (path);
+	current = all()->envp;
+	while (current)
+	{
+		split = ft_split(current->content, '=');
+		if (!split[0])
+			return (NULL);
+		if (!ft_strcmp("PATH", split[0]))
+			return split[1];
+		current = current->next;
+	}
+	return (NULL);
 }
 
 char	*get_env_variable(const char *env_key)
 {
-	char		*env_value;
+	t_list		*current;
+	char		**split;
 
 	if (env_key == NULL)
 		return (NULL);
-	env_value = getenv(env_key);
-	return (env_value);
+	current = all()->envp;
+	while (current)
+	{
+		split = ft_split(current->content, '=');
+		if (!split[0])
+			return (NULL);
+		if (!ft_strcmp(env_key, split[0]))
+			return split[1];
+		current = current->next;
+	}
+	return (NULL);
 }

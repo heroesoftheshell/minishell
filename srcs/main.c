@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 16:42:38 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/23 16:40:04 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,14 @@ void		exec_command(char *command, int pipefd[2], int flags)
 static void catch_function(int signo) {
     (void)signo;
 	write(1, "\n", 1);
-	// rl_replace_line("", 0);
-	// rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_on_new_line();
 	rl_redisplay();
+}
+
+void do_nothing(int signo)
+{
+	(void)signo;
 }
 
 int			main(int argc, char **argv, char **envp)
@@ -58,27 +63,21 @@ int			main(int argc, char **argv, char **envp)
 	char	**cmd_chunks;
 	char	**parsed_chunk_data;
 	int		chunk_idx;
-	// int		p_idx;
 
 	(void)argc;
 	(void)argv;
-
 	init_env(envp);
+	rl_getc_function = custom_rl_getc_fuction;
+	rl_catch_signals = 0;
+	
 	rl_bind_key('\t', rl_complete);
-	// printf("PATH : %s", get_env_path());
 	signal(SIGINT, catch_function);
-	signal(SIGQUIT, catch_function);
+	signal(SIGQUIT, do_nothing);
 	while (1)
 	{
         input = readline("\033[1;4;34;47mHOS >\033[0m ");
-		if (input == NULL || *input == '\0')
-		{
-			rl_replace_line("", 0);
-			// rl_redisplay();	
-			printf("exit\n");
-			free(input);
-			return (0);
-		}
+		if (input == 0)
+			break ;
 		else
 		{
 			rl_on_new_line();

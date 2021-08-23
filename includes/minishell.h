@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 07:56:21 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/23 14:36:42 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,7 @@ void	ft_exit(char *exit_code);
 
 char	**line_parse(const char *line);
 char	**cmd_chunk_parse(const char *chunk);
+int		custom_rl_getc_fuction(FILE *stream);
+
 
 #endif

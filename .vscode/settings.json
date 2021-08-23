@@ -3,6 +3,7 @@
         "*.html": "html",
         "stdio.h": "c",
         "readline.h": "c",
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "termios.h": "c"
     }
 }
