@@ -113,38 +113,53 @@ char		**line_parse(const char *line)
 	return (pipe_cmd_chunk);
 }
 
-static char	*conv_env_var(const char **src, int str_idx, int *char_idx)
+static char	*conv_env_var(const char **src, int str_idx, int *char_idx,\
+	bool is_inside_quote)
 {
-	// const char	*src_start;
 	char			*env_key;
 	char			*env_value;
 	size_t			str_len;
 	unsigned int	start_char_idx;
 
-	// (*src)++;
-	// src_start = *src;
 	start_char_idx = *char_idx + 1;
 	str_len = 0;
+	// FIXME: LOGIC ERROR
 	while (src[str_idx][++(*char_idx)])
 	{
-		if (src[str_idx][*char_idx] == '"' ||\
-			ft_isspace(src[str_idx][*char_idx]))
+		if (is_inside_quote)
 		{
-			if (str_len == 0)
-				return (ft_strdup("$"));
-			env_key = ft_substr(src[str_idx], start_char_idx, str_len);
-			env_value = get_env_variable((const char *)env_key);
-			if (env_key)
-				free(env_key);
-			return (env_value);
+			if (src[str_idx][*char_idx] == '"' ||\
+				ft_isspace(src[str_idx][*char_idx]))
+			{
+				if (str_len == 0)
+					return (ft_strdup("$"));
+				env_key = ft_substr(src[str_idx], start_char_idx, str_len);
+				env_value = get_env_variable((const char *)env_key);
+				if (env_key)
+					free(env_key);
+				return (env_value);
+			}
+			else if (src[str_idx][*char_idx] == '\0')
+			{
+				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+				return (NULL);
+			}
 		}
-		else if (src[str_idx][*char_idx] == '\0')
+		else
 		{
-			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
-			return (NULL);
+			if (ft_isspace(src[str_idx][*char_idx]) ||\
+				src[str_idx][*char_idx] == '\0')
+			{
+				if (str_len == 0)
+					return (ft_strdup("$"));
+				env_key = ft_substr(src[str_idx], start_char_idx, str_len);
+				env_value = get_env_variable((const char *)env_key);
+				if (env_key)
+					free(env_key);
+				return (env_value);
+			}
 		}
 		str_len++;
-		// (*src)++;
 	}
 	return (NULL);
 }
@@ -152,48 +167,55 @@ static char	*conv_env_var(const char **src, int str_idx, int *char_idx)
 static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 				int *char_idx)
 {
-	char			*value;
-	// const char	*src_start;
+	char			*converted_str;
 	char			*env_value;
-	char			*temp;
 	char			*substr;
+	char			*joined_str;
 	int				str_len;
 	unsigned int	start_char_idx;
 
-	value = NULL;
-	// (*src)++;
-	// src_start = *src;
+	converted_str = NULL;
+	joined_str = NULL;
 	start_char_idx = *char_idx + 1;
 	str_len = 0;
 	while (src[str_idx][++(*char_idx)])
 	{
 		if (src[str_idx][*char_idx] == '$' && quote_char == '"')
 		{
-			env_value = conv_env_var(src, str_idx, char_idx);
-			// printf("env_value : %s\n", env_value);
+			if (*char_idx - start_char_idx > 0)
+			{
+				if (converted_str == NULL)
+					converted_str = ft_substr(src[str_idx], start_char_idx,\
+						*char_idx - start_char_idx);
+				else
+				{
+					substr = ft_substr(src[str_idx], start_char_idx,\
+						*char_idx - start_char_idx);
+					joined_str = ft_strjoin(converted_str, substr);
+					free(converted_str);
+					free(substr);
+					converted_str = joined_str;
+					substr = NULL;
+					joined_str = NULL;
+				}
+			}
+			env_value = conv_env_var(src, str_idx, char_idx, true);
+			// printf("converted_str : %s, env_value : %s\n", converted_str, env_value);
 			if (env_value != NULL)
 			{
-				if (value == NULL)
+				if (converted_str == NULL)
 				{
-					value = ft_substr(src[str_idx], start_char_idx, str_len);
-					temp = ft_strjoin(value, env_value);
+					converted_str = env_value;
 				}
 				else
 				{
-					substr = ft_substr(src[str_idx], start_char_idx, str_len);
-					temp = ft_strjoin(value, substr);
-					free(value);
-					free(substr);
-					value = temp;
-					temp = ft_strjoin(value, env_value);
+					joined_str = ft_strjoin(converted_str, env_value);
+					free(converted_str);
+					free(env_value);
+					converted_str = joined_str;
 				}
-				free(value);
-				value = temp;
-				// free(env_value);
-				// src_start = *src;
 			}
 			start_char_idx = *char_idx;
-			str_len = 0;
 			if (src[str_idx][*char_idx] == '\0')
 				return (NULL);
 		}
@@ -204,57 +226,39 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 		}
 		else if (src[str_idx][*char_idx] == quote_char)
 		{
-			if (value == NULL)
-				value = ft_substr(src[str_idx], start_char_idx, str_len);
+			if (converted_str == NULL)
+			{
+				converted_str = ft_substr(src[str_idx], start_char_idx,\
+					*char_idx - start_char_idx);
+			}
 			else
 			{
-				substr = ft_substr(src[str_idx], start_char_idx, str_len);
-				temp = ft_strjoin(value, substr);
-				free(value);
+				substr = ft_substr(src[str_idx], start_char_idx,\
+					*char_idx - start_char_idx);
+				joined_str = ft_strjoin(converted_str, substr);
+				free(converted_str);
 				free(substr);
-				value = temp;
+				converted_str = joined_str;
 			}
-			return (value);
+			return (converted_str);
 		}
 		str_len++;
-		// (*src)++;
 	}
 	return (NULL);
 }
-
-// int		insert_str_to_parsed_data(char **parsed_data, char *str, int curr_parse_order)
-// {
-// 	if (curr_parse_order == COMMAND)
-// 		parsed_data[COMMAND] = str;
-// 	// else if (curr_parse_order == OPTION)
-// 	return (0);
-// }
-
-// int		validate_option(char *str, int curr_parse_order)
-// {
-// 	return (0);
-// }
-
-// // TODO : parse redirect file name and skip space after file name
-// char	**parse_redirect(const char **chunk, char **parsed_datas)
-// {
-
-// }
 
 int			switch_str_to_handled_quote_str(char **splitted_data,\
 				int str_idx)
 {
 	// FIXME: string variables should change structure type
 	char	*converted_str;
-	char	*prev_str;
-	char	*next_str;
+	char	*quote_str;
+	char	*substr;
 	char	*joined_str;
-	char	*tmp_str;
 	int		start_idx;
 	int		char_idx;
 
 	converted_str = NULL;
-	prev_str = NULL;
 	joined_str = NULL;
 	start_idx = 0;
 	char_idx = -1;
@@ -262,75 +266,64 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 	{
 		if (is_quote(splitted_data[str_idx][char_idx]))
 		{
-			if (char_idx - start_idx > 0)
-				prev_str = ft_substr(splitted_data[str_idx], start_idx,\
-					char_idx - start_idx);
-			converted_str = parse_quote_str((const char **)splitted_data,\
-				splitted_data[str_idx][char_idx], str_idx, &char_idx);
-			// printf("parse_quote_str : %s\n", converted_str);
-			start_idx = char_idx + 1;
-			if (converted_str == NULL)
+			substr = ft_substr(splitted_data[str_idx], start_idx,\
+						char_idx - start_idx);
+			quote_str = parse_quote_str((const char **)splitted_data,\
+					splitted_data[str_idx][char_idx], str_idx, &char_idx);
+			if (quote_str == NULL)
 			{
-				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
+				free(substr);
+				if (converted_str)
+					free(converted_str);
 				return (QUOTE_EXIT_ERR);
 			}
-			if (prev_str)
+			if (converted_str == NULL)
+				converted_str = ft_strjoin(substr, quote_str);
+			else
 			{
-				if (joined_str == NULL)
+				joined_str = ft_strjoin(converted_str, substr);
+				free(converted_str);
+				free(substr);
+				converted_str = ft_strjoin(joined_str, quote_str);
+				free(joined_str);
+				free(quote_str);
+			}
+			start_idx = char_idx + 1;
+		}
+		else if (splitted_data[str_idx][char_idx] == '$')
+		{
+			substr = ft_substr(splitted_data[str_idx], start_idx,\
+					char_idx - start_idx);
+			if (converted_str)
+			{
+				joined_str = ft_strjoin(converted_str, substr);
+				free(converted_str);
+				free(substr);
+				substr = conv_env_var((const char **)splitted_data, str_idx, &char_idx, false);
+				if (substr)
 				{
-					joined_str = ft_strjoin(prev_str, converted_str);
-					free(prev_str);
-					free(converted_str);
-					prev_str = NULL;
-					converted_str = NULL;
-				}
-				else
-				{
-					tmp_str = ft_strjoin(joined_str, prev_str);
+					converted_str = ft_strjoin(joined_str, substr);
 					free(joined_str);
-					free(prev_str);
-					prev_str = NULL;
-					joined_str = tmp_str;
-					tmp_str = ft_strjoin(joined_str, converted_str);
-					free(joined_str);
-					free(converted_str);
-					converted_str = NULL;
-					joined_str = tmp_str;
+					free(substr);
 				}
 			}
 			else
 			{
-				if (joined_str == NULL)
-				{
-					joined_str = converted_str;
-				}
-				else
-				{
-					tmp_str = ft_strjoin(joined_str, converted_str);
-					free(joined_str);
-					free(converted_str);
-					converted_str = NULL;
-					joined_str = tmp_str;
-				}
+				converted_str = conv_env_var((const char **)splitted_data, str_idx, &char_idx, false);
+				printf("%s\n", converted_str);
+				if (converted_str == NULL)
+					converted_str = ft_strdup("\0");
 			}
-		}
-		else if (splitted_data[str_idx][char_idx] == '$')
-		{
-			//TODO
-			converted_str = conv_env_var((const char **)splitted_data, str_idx, &char_idx);
+			start_idx = char_idx;
 		}
 	}
-	if (joined_str)
+	if (converted_str)
 	{
-		if (char_idx - start_idx > 0)
-		{
-			next_str = ft_substr(splitted_data[str_idx], start_idx,\
-						char_idx - start_idx);
-			tmp_str = ft_strjoin(joined_str, next_str);
-			free(joined_str);
-			free(next_str);
-			joined_str = tmp_str;
-		}
+		substr = ft_substr(splitted_data[str_idx], start_idx,\
+				char_idx - start_idx);
+		joined_str = ft_strjoin(converted_str, substr);
+		free(converted_str);
+		free(substr);
 		free(splitted_data[str_idx]);
 		splitted_data[str_idx] = joined_str;
 	}
