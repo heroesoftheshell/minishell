@@ -123,43 +123,34 @@ static char	*conv_env_var(const char **src, int str_idx, int *char_idx,\
 
 	start_char_idx = *char_idx + 1;
 	str_len = 0;
-	// FIXME: LOGIC ERROR
 	while (src[str_idx][++(*char_idx)])
 	{
-		if (is_inside_quote)
+		if (is_quote(src[str_idx][*char_idx]) ||\
+			ft_isspace(src[str_idx][*char_idx]))
 		{
-			if (src[str_idx][*char_idx] == '"' ||\
-				ft_isspace(src[str_idx][*char_idx]))
-			{
-				if (str_len == 0)
-					return (ft_strdup("$"));
-				env_key = ft_substr(src[str_idx], start_char_idx, str_len);
-				env_value = get_env_variable((const char *)env_key);
-				if (env_key)
-					free(env_key);
-				return (env_value);
-			}
-			else if (src[str_idx][*char_idx] == '\0')
-			{
-				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
-				return (NULL);
-			}
-		}
-		else
-		{
-			if (ft_isspace(src[str_idx][*char_idx]) ||\
-				src[str_idx][*char_idx] == '\0')
-			{
-				if (str_len == 0)
-					return (ft_strdup("$"));
-				env_key = ft_substr(src[str_idx], start_char_idx, str_len);
-				env_value = get_env_variable((const char *)env_key);
-				if (env_key)
-					free(env_key);
-				return (env_value);
-			}
+			if (!is_inside_quote)
+				--(*char_idx);
+			if (str_len == 0)
+				return (ft_strdup("$"));
+			env_key = ft_substr(src[str_idx], start_char_idx, str_len);
+			env_value = get_env_variable((const char *)env_key);
+			if (env_key)
+				free(env_key);
+			return (env_value);
 		}
 		str_len++;
+	}
+	if (is_inside_quote)
+		return (NULL);
+	else
+	{
+		if (str_len == 0)
+			return (ft_strdup("$"));
+		env_key = ft_substr(src[str_idx], start_char_idx, str_len);
+		env_value = get_env_variable((const char *)env_key);
+		if (env_key)
+			free(env_key);
+		return (env_value);
 	}
 	return (NULL);
 }
@@ -200,7 +191,6 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 				}
 			}
 			env_value = conv_env_var(src, str_idx, char_idx, true);
-			// printf("converted_str : %s, env_value : %s\n", converted_str, env_value);
 			if (env_value != NULL)
 			{
 				if (converted_str == NULL)
@@ -221,7 +211,6 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 		}
 		if (src[str_idx][*char_idx] == '\0')
 		{
-			print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 			return (NULL);
 		}
 		else if (src[str_idx][*char_idx] == quote_char)
@@ -275,6 +264,7 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 				free(substr);
 				if (converted_str)
 					free(converted_str);
+				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 				return (QUOTE_EXIT_ERR);
 			}
 			if (converted_str == NULL)
@@ -306,15 +296,22 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 					free(joined_str);
 					free(substr);
 				}
+				else
+				{
+					converted_str = joined_str;
+				}
 			}
 			else
 			{
 				converted_str = conv_env_var((const char **)splitted_data, str_idx, &char_idx, false);
-				printf("%s\n", converted_str);
 				if (converted_str == NULL)
 					converted_str = ft_strdup("\0");
+				joined_str = ft_strjoin(substr, converted_str);
+				free(substr);
+				free(converted_str);
+				converted_str = joined_str;
 			}
-			start_idx = char_idx;
+			start_idx = char_idx + 1;
 		}
 	}
 	if (converted_str)
@@ -330,18 +327,60 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 	return (SUCCESS);
 }
 
-char		**cmd_chunk_parse(const char *chunk)
+int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
+{
+	int		sd_idx;
+	int		cmd_count;
+	char	*joined_str;
+	char	*complete_red_str;
+
+	if (parsed_data == NULL)
+		return (FAIL);
+	sd_idx = -1;
+	cmd_count = 0;
+	while (splitted_data[++sd_idx])
+		cmd_count++;
+	parsed_data->cmd = (char **)ft_calloc(cmd_count + 1, sizeof(char *));
+	sd_idx = -1;
+	cmd_count = -1;
+	while (splitted_data[++sd_idx])
+	{
+		if (is_redirect_sign(splitted_data[sd_idx][0]))
+		{
+			if (is_include_filename_in_redirect(splitted_data[sd_idx]))
+			{
+				joined_str = ft_strjoin3(parsed_data->redirections, ",", splitted_data[sd_idx]);
+				free(parsed_data->redirections);
+				parsed_data->redirections = joined_str;
+			}
+			else
+			{
+				complete_red_str = ft_strjoin(splitted_data[sd_idx], splitted_data[sd_idx + 1]);
+				joined_str = ft_strjoin3(parsed_data->redirections, ",", complete_red_str);
+				free(complete_red_str);
+				free(parsed_data->redirections);
+				parsed_data->redirections = joined_str;
+				++sd_idx;
+			}
+		}
+		else
+			(parsed_data->cmd)[++cmd_count] = ft_strdup(splitted_data[sd_idx]);
+	}
+	(parsed_data->cmd)[++cmd_count] = NULL;
+	return (SUCCESS);
+}
+
+t_parse_data		*cmd_chunk_parse(const char *chunk)
 {
 	// validate
 	// 1. command path or name
 	// 2. command arg
 	// 3. redirect file exist
-	char	**splitted_data;
-	int		sd_idx;
-	// char	**parsed_data;
-	// int		curr_parse_order;
+	t_parse_data	*parsed_data;
+	char			**splitted_data;
+	int				sd_idx;
+	int				err_chk;
 
-	// curr_parse_order = COMMAND;
 	skip_space(&chunk);
 	splitted_data = cmdline_split(chunk, " ");
 	if (splitted_data == NULL)
@@ -349,12 +388,12 @@ char		**cmd_chunk_parse(const char *chunk)
 	sd_idx = -1;
 	while (splitted_data[++sd_idx])
 	{
-		switch_str_to_handled_quote_str(splitted_data, sd_idx);
+		err_chk = switch_str_to_handled_quote_str(splitted_data, sd_idx);
+		if (err_chk != SUCCESS)
+			return (NULL);
 	}
-	return (splitted_data);
+	parsed_data = (t_parse_data *)ft_calloc(1, sizeof(t_parse_data));
+	divide_redirection((const char **)splitted_data, parsed_data);
+	delete_split_strs(splitted_data);
+	return (parsed_data);
 }
-
-// parsed_chunk_data[0] : redirection set
-// parsed_chunk_data[1] : cmd name
-// parsed_chunk_data[2] : opt or arg
-// parsed_chunk_data[~] : args
