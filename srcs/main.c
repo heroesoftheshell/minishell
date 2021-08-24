@@ -74,11 +74,12 @@ int			main(int argc, char **argv, char **envp)
 	int		pipefd_backup[2];
 	// pid_t	pid;
 	char	**cmd_chunks;
-	char	**parsed_chunk_data;
+	// char	**parsed_chunk_data;
 	int		chunk_idx;
 	int		pid;
 	int		exit_status;
 	int		is_pipe;
+	t_parse_data	*parsed_data;
 
 	(void)argc;
 	(void)argv;
@@ -107,12 +108,10 @@ int			main(int argc, char **argv, char **envp)
 			chunk_idx = -1;
 			while (cmd_chunks && cmd_chunks[++chunk_idx] != NULL)
 			{
-				parsed_chunk_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
-				if (parsed_chunk_data == NULL)
+				parsed_data = cmd_chunk_parse((const char *)cmd_chunks[chunk_idx]);
+				if (parsed_data == NULL)
 				{
-					// perror("hosh: ");
-					delete_split_strs(cmd_chunks);
-					break ;
+					continue ;
 				}
 				if (cmd_chunks[1] != NULL || is_pipe)
 				{
@@ -132,7 +131,7 @@ int			main(int argc, char **argv, char **envp)
 					{
 						dup2(pipefd[1], STDOUT_FILENO);
 						close(pipefd[1]); // fd 교체
-						run_cmd(parsed_chunk_data);
+						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
 					if (pid > 0)
@@ -146,13 +145,13 @@ int			main(int argc, char **argv, char **envp)
 				}
 				else
 				{
-					if (is_builtin(parsed_chunk_data[0]))
-						run_cmd(parsed_chunk_data);
+					if (is_builtin((parsed_data->cmd)[0]))
+						run_cmd(parsed_data->cmd);
 					else
 					{
 						pid = fork();
 						if (pid == 0)
-							run_cmd(parsed_chunk_data);
+							run_cmd(parsed_data->cmd);
 						else
 						{
 							waitpid(pid, &exit_status, WCONTINUED);
@@ -161,46 +160,11 @@ int			main(int argc, char **argv, char **envp)
 						}
 					}
 				}
-
-				// TODO: process excute
-				// ex 1) exec_func(const char ** parsed_chunk_data, char *envp);
-				// ex 2) exec_func(const char *cmd, const char *arg, const char *redir, char *envp)
-				delete_split_strs(parsed_chunk_data);
+				delete_parsed_data(parsed_data);
 			}
 			delete_split_strs(cmd_chunks);
-			// pid = fork();
-			// waitpid(0, 0, 0);
-			// if (pid == 0)
-	// 	line = ft_split(input, '|');
-	// 	cnt = 0;
-	// 	pipe(pipefd1);
-	// 	pipe(pipefd2);
-	// 	// while (++cnt)
-	// 	// {
-	// 		exec_command("/bin/ls", pipefd1, STDOUT_PIPE);
-	// 		close(pipefd1[1]);
-	// 		exec_command("/bin/echo", pipefd2, STDIN_PIPE);
-	// 		close(pipefd2[0]);
-	// 		int temp_pipefd[] = {pipefd1[0], pipefd2[1]};
-    //     	exec_command("/usr/bin/wc", temp_pipefd, STDIN_PIPE | STDOUT_PIPE);
-
-    //     	close(pipefd1[0]);
-    //     	close(pipefd2[1]);
-
-    //     	int wstatus;
-    //     	while (wait(&wstatus) > 0)
-	// 			printf("1\n");
-	// 		return 0;
-	// 	// }
-
-
-	// 		// if (pid == 0) // child
-	// 		// {
-	// 		// 	// pipefd[2] = get_fd(line); //stdin stdout 관리
-	// 		// 	// execve() 명령어 실행
-	// 		// }
-		add_history(input);
-		free(input);
+			add_history(input);
+			free(input);
 		}
 	}
 	return 0;

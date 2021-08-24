@@ -35,7 +35,7 @@ int		ft_strcmp(const char *s1, const char *s2)
 	// size_t	n;
 
 	// n = ft_strlen(s1) + 1;
-	if (s1 == NULL && s2 == NULL)
+	if (s1 == NULL || s2 == NULL)
 		return (0);
 	while (1)
 	{
