@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 14:36:42 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/24 11:15:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	print_system_err(const char *str);
 
 char	*get_env_path(void);
 char	*get_env_variable(const char *env_key);
+void	set_env_variable(const char *env_key, const char *env_value);
 void	run_cmd(char **chunk);
 void	ft_chdir(char **cmd);
 void	ft_echo(char **cmd);

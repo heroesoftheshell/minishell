@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 17:32:37 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/23 19:10:45 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,8 @@ void		run_cmd(char **chunk)
 	char		**split_path;
 	int			cnt;
 	char		**env;
-	// extern char	**environ;
-	// char 		**chunk;
-	// char		**line;
-	// pid_t		pids[128];
 
-	// line = ft_split(cmd, '|');
 	cnt = -1;
-	// while (++cnt < ft_strlen(line))
-	// {
-	// 	fork();
-	// 	wait(NULL);
-	// }
-	// chunk = ft_split(cmd, ' ');
 	if (!ft_strcmp(chunk[0], "cd"))
 		ft_chdir(chunk);
 	else if (!ft_strcmp(chunk[0], "echo"))

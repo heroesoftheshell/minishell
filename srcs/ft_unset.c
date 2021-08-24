@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/20 17:31:47 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/24 13:53:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		del_unset_key(char* key)
 			free(current);
 			return (1);
 		}
+		// printf("list_key: %s\n", list_key);
+		// printf("key : %s\n", key);
 		free(split);
 		free(list_key);
 		prev = current;
