@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/24 16:22:28 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/26 17:25:44 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,17 @@ int			is_builtin(char *cmd)
 int			main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	// char	**line;
-	// int		cnt;
 	int		pipefd[2];
 	int		pipefd_backup[2];
-	// pid_t	pid;
 	char	**cmd_chunks;
 	// char	**parsed_chunk_data;
 	int		chunk_idx;
 	int		pid;
+	int		pid_list[BUFSIZ];
 	int		exit_status;
 	int		is_pipe;
 	t_parse_data	*parsed_data;
+	int		idx;
 
 	(void)argc;
 	(void)argv;
@@ -89,16 +88,17 @@ int			main(int argc, char **argv, char **envp)
 	rl_getc_function = custom_rl_getc_fuction;
 	rl_catch_signals = 0;
 	
-	rl_bind_key('\t', rl_complete);
 	signal(SIGINT, catch_function);
 	signal(SIGQUIT, do_nothing);
-
+	idx = -1;
 	is_pipe = 0;
 	while (1)
 	{
-        input = readline("\033[1;4;34;47mHOS >\033[0m ");
+		dup2(pipefd_backup[1], 1);
+		dup2(pipefd_backup[0], 0);
 		pipefd[0] = dup(pipefd_backup[0]);
 		pipefd[1] = dup(pipefd_backup[1]);
+		input = readline("\033[1;4;34;47mHOS >\033[0m ");
 		if (input == 0)
 			break ;
 		else
@@ -113,22 +113,15 @@ int			main(int argc, char **argv, char **envp)
 				{
 					continue ;
 				}
-				if (cmd_chunks[1] != NULL || is_pipe)
+				if (cmd_chunks[chunk_idx + 1] != NULL)
 				{
 					is_pipe = 1;
-					dup2(pipefd[0], STDIN_FILENO);
-					close(pipefd[0]);
 					pipe(pipefd);
-					signal(SIGINT, catch_function);
-					signal(SIGQUIT, do_nothing);
 					pid = fork();
-					// ft_putnbr_fd(pid, 2);
-					// ft_putchar_fd('\n', 2);
-					// ft_putstr_fd(cmd_chunks[chunk_idx], 2);
-					// ft_putchar_fd('\n', 2);
-
 					if (pid == 0) // child
 					{
+						dup2(pipefd[0], STDIN_FILENO);
+						close(pipefd[0]);
 						dup2(pipefd[1], STDOUT_FILENO);
 						close(pipefd[1]); // fd 교체
 						run_cmd(parsed_data->cmd);
@@ -136,11 +129,36 @@ int			main(int argc, char **argv, char **envp)
 					}
 					if (pid > 0)
 					{
-						waitpid(pid, &exit_status, 0);
-						if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
-							all()->end_code = WEXITSTATUS(exit_status);
+						pid_list[++idx] = pid;
 						close(pipefd[1]);
-						is_pipe = 0;
+					}
+				}
+				else if (is_pipe)
+				{
+					pid = fork();
+					// pipe(pipefd);
+					if (pid == 0) // child
+					{
+						dup2(pipefd[0], STDIN_FILENO);
+						dup2(pipefd_backup[1], STDOUT_FILENO);
+						close(pipefd[0]);
+						close(pipefd[1]);
+						run_cmd(parsed_data->cmd);
+						exit(all()->end_code);
+					}
+					if (pid > 0)
+					{
+						pid_list[++idx] = pid;
+						close(pipefd[1]);
+						idx = -1;
+						while (pid_list[++idx])
+						{
+							waitpid(pid_list[idx], &exit_status, WCONTINUED);
+							// ft_putnbr_fd(pid_list[idx], 2);
+							if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
+								all()->end_code = WEXITSTATUS(exit_status);
+							pid_list[idx] = 0;
+						}
 					}
 				}
 				else

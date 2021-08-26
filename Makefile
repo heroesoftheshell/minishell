@@ -6,13 +6,13 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/08/23 14:17:54 by hekang           ###   ########.fr        #
+#    Updated: 2021/08/26 15:09:02 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 
-GCCFLAG = -Wall -Werror -Wextra
+# GCCFLAG = -Wall -Werror -Wextra
 RM 		= rm -f
 
 SRCS	= main env cmd ft_chdir ft_echo ft_pwd all ft_export ft_unset validate_env_key ft_print_endcode\
