@@ -21,6 +21,7 @@
 #include "readline.h"
 #include <string.h>
 #include <signal.h>
+#include <fcntl.h>
 #include "libft.h"
 # define SYNTAX_ERR_MSG_HEADER	"hosh: syntax error near unexpected token `"
 # define SYNTAX_ERR_MSG_TAIL	"'"
@@ -83,6 +84,7 @@ char			**line_parse(const char *line);
 t_parse_data	*cmd_chunk_parse(const char *chunk);
 bool			is_include_filename_in_redirect(const char *str);
 int				custom_rl_getc_fuction(FILE *stream);
+int				handle_redirection(const char *redirections);
 
 
 #endif

@@ -94,11 +94,11 @@ int			main(int argc, char **argv, char **envp)
 	is_pipe = 0;
 	while (1)
 	{
-		dup2(pipefd_backup[1], 1);
-		dup2(pipefd_backup[0], 0);
 		pipefd[0] = dup(pipefd_backup[0]);
 		pipefd[1] = dup(pipefd_backup[1]);
-		input = readline("\033[1;4;34;47mHOS >\033[0m ");
+		dup2(pipefd_backup[1], 1);
+		dup2(pipefd_backup[0], 0);
+        input = readline("\033[1;4;34;47mHOS >\033[0m ");
 		if (input == 0)
 			break ;
 		else
@@ -113,7 +113,12 @@ int			main(int argc, char **argv, char **envp)
 				{
 					continue ;
 				}
-				if (cmd_chunks[chunk_idx + 1] != NULL)
+				printf("redirections : %s\n", parsed_data->redirections);
+				if (parsed_data->redirections)
+				{
+					handle_redirection(parsed_data->redirections);
+				}
+				if (cmd_chunks[1] != NULL || is_pipe)
 				{
 					is_pipe = 1;
 					pipe(pipefd);
@@ -164,7 +169,9 @@ int			main(int argc, char **argv, char **envp)
 				else
 				{
 					if (is_builtin((parsed_data->cmd)[0]))
+					{
 						run_cmd(parsed_data->cmd);
+					}
 					else
 					{
 						pid = fork();

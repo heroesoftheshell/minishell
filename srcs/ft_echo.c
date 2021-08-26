@@ -17,7 +17,7 @@ void	ft_echo(char **cmd)
 	int		cnt;
 
 	cnt = 0;
-	if (!strcmp(cmd[1], "-n"))
+	if (!ft_strcmp(cmd[1], "-n"))
 		++cnt;
 	while (cmd[++cnt])
 	{
@@ -25,7 +25,7 @@ void	ft_echo(char **cmd)
 		if (cmd[cnt + 1])
 			write(STDOUT_FILENO, " ", 1);
 	}
-	if (strcmp(cmd[1], "-n"))
+	if (ft_strcmp(cmd[1], "-n"))
 		write(STDOUT_FILENO, "\n", 1);
 	all()->end_code = 0;
 }
