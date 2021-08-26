@@ -349,17 +349,27 @@ int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
 		{
 			if (is_include_filename_in_redirect(splitted_data[sd_idx]))
 			{
-				joined_str = ft_strjoin3(parsed_data->redirections, ",", splitted_data[sd_idx]);
-				free(parsed_data->redirections);
-				parsed_data->redirections = joined_str;
+				if (parsed_data->redirections)
+				{
+					joined_str = ft_strjoin3(parsed_data->redirections, ",", splitted_data[sd_idx]);
+					free(parsed_data->redirections);
+					parsed_data->redirections = joined_str;
+				}
+				else
+					parsed_data->redirections = ft_strdup(splitted_data[sd_idx]);
 			}
 			else
 			{
 				complete_red_str = ft_strjoin(splitted_data[sd_idx], splitted_data[sd_idx + 1]);
-				joined_str = ft_strjoin3(parsed_data->redirections, ",", complete_red_str);
-				free(complete_red_str);
-				free(parsed_data->redirections);
-				parsed_data->redirections = joined_str;
+				if (parsed_data->redirections)
+				{
+					joined_str = ft_strjoin3(parsed_data->redirections, ",", complete_red_str);
+					free(complete_red_str);
+					free(parsed_data->redirections);
+					parsed_data->redirections = joined_str;
+				}
+				else
+					parsed_data->redirections = complete_red_str;
 				++sd_idx;
 			}
 		}
@@ -372,10 +382,6 @@ int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
 
 t_parse_data		*cmd_chunk_parse(const char *chunk)
 {
-	// validate
-	// 1. command path or name
-	// 2. command arg
-	// 3. redirect file exist
 	t_parse_data	*parsed_data;
 	char			**splitted_data;
 	int				sd_idx;
