@@ -6,38 +6,12 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 11:22:08 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 15:30:33 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#define STDIN_PIPE 0x0
-#define STDOUT_PIPE 0x1
 
-void		exec_command(char *command, int pipefd[2], int flags)
-{
-	pid_t	cpid;
-
-	cpid = fork();
-	if (cpid > 0)
-		return ;
-	else if (cpid < 0)
-		perror("fork");
-	if (flags & STDIN_PIPE)
-		if (dup2(pipefd[0], STDIN_PIPE) < 0)
-			perror("dup2");
-	if (flags & STDOUT_PIPE)
-		if (dup2(pipefd[1], STDOUT_PIPE) < 0)
-			perror("dup2");
-	close(pipefd[0]);
-	close(pipefd[1]);
-
-	char *const argv[] = {command, NULL};
-	char *const envp[] = {NULL};
-	printf("%s \n\n", command);
-	execve(command, argv, envp);
-	perror("execv");
-}
 
 static void catch_function(int signo) {
     (void)signo;
@@ -70,6 +44,7 @@ int			main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	int		pipefd[2];
+	int		pipefd2[2];
 	int		pipefd_backup[2];
 	char	**cmd_chunks;
 	// char	**parsed_chunk_data;
@@ -80,6 +55,7 @@ int			main(int argc, char **argv, char **envp)
 	int		is_pipe;
 	t_parse_data	*parsed_data;
 	int		idx;
+	int		backup_fd;
 
 	(void)argc;
 	(void)argv;
@@ -93,6 +69,7 @@ int			main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, do_nothing);
 	idx = -1;
 	is_pipe = 0;
+	pipe(pipefd2);
 	while (1)
 	{
 		pipefd[0] = dup(pipefd_backup[0]);
@@ -119,10 +96,10 @@ int			main(int argc, char **argv, char **envp)
 				{
 					handle_redirection(parsed_data->redirections);
 				}
-				if (cmd_chunks[chunk_idx + 1] != NULL)
+				if (cmd_chunks[chunk_idx + 1] != NULL && is_pipe != 1)
 				{
-					pipe(pipefd);
 					is_pipe = 1;
+					pipe(pipefd);
 					pid = fork();
 					if (pid == 0) // child
 					{
@@ -139,23 +116,42 @@ int			main(int argc, char **argv, char **envp)
 						close(pipefd[1]);
 					}
 				}
-				else if (is_pipe)
+				else if (cmd_chunks[chunk_idx + 1] != NULL && is_pipe == 1)
 				{
+					pipe(pipefd2);
 					pid = fork();
-					// pipe(pipefd);
 					if (pid == 0) // child
 					{
 						dup2(pipefd[0], STDIN_FILENO);
-						dup2(pipefd_backup[1], STDOUT_FILENO);
 						close(pipefd[0]);
-						// close(pipefd[1]);
+						dup2(pipefd2[1], STDOUT_FILENO);
+						close(pipefd2[1]); // fd 교체
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
 					if (pid > 0)
 					{
 						pid_list[++idx] = pid;
-						close(pipefd[1]);
+						close(pipefd2[1]);
+						dup2(pipefd2[0], pipefd[0]);
+					}
+				}
+				else if (is_pipe)
+				{
+					pid = fork();
+					if (pid == 0) // child
+					{
+						dup2(pipefd[0], STDIN_FILENO);
+						close(pipefd[0]);
+						dup2(pipefd_backup[1], STDOUT_FILENO);
+						close(pipefd_backup[1]);
+						run_cmd(parsed_data->cmd);
+						exit(all()->end_code);
+					}
+					if (pid > 0)
+					{
+						pid_list[++idx] = pid;
+						close(pipefd_backup[1]);
 						idx = -1;
 						while (pid_list[++idx])
 						{
