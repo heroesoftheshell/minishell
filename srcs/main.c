@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 16:12:41 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 17:18:07 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int			main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	init_env(envp);
-	pipefd_backup[0] = dup(STDIN_FILENO);
-	pipefd_backup[1] = dup(STDOUT_FILENO);
+	// pipefd_backup[0] = dup(STDIN_FILENO);
+	// pipefd_backup[1] = dup(STDOUT_FILENO);
 	rl_getc_function = custom_rl_getc_fuction;
 	rl_catch_signals = 0;
 	
@@ -68,20 +68,17 @@ int			main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, do_nothing);
 	idx = -1;
 	is_pipe = 0;
-	pipe(pipefd2);
 	while (1)
 	{
-		pipefd[0] = dup(pipefd_backup[0]);
-		pipefd[1] = dup(pipefd_backup[1]);
-		dup2(pipefd_backup[1], 1);
 		dup2(pipefd_backup[0], 0);
+		dup2(pipefd_backup[1], 1);
         input = readline("\033[1;4;34;47mHOS >\033[0m ");
 		if (input == 0)
 			break ;
 		else
 		{
-			// signal(SIGINT, do_nothing);
-			rl_on_new_line();
+			signal(SIGINT, do_nothing);
+			// rl_on_new_line();
 			cmd_chunks = line_parse((const char *)input);
 			chunk_idx = -1;
 			while (cmd_chunks && cmd_chunks[++chunk_idx] != NULL)
@@ -103,7 +100,7 @@ int			main(int argc, char **argv, char **envp)
 					pid = fork();
 					if (pid == 0) // child
 					{
-						dup2(pipefd[0], STDIN_FILENO);
+						dup2(pipefd_backup[0], STDIN_FILENO);
 						close(pipefd[0]);
 						dup2(pipefd[1], STDOUT_FILENO);
 						close(pipefd[1]); // fd 교체
@@ -124,18 +121,18 @@ int			main(int argc, char **argv, char **envp)
 					{
 						dup2(pipefd[0], STDIN_FILENO);
 						close(pipefd[0]);
+						close(pipefd[1]);
 						dup2(pipefd2[1], STDOUT_FILENO);
 						close(pipefd2[1]); // fd 교체
-						close(pipefd[1]);
 						close(pipefd2[0]);
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
 					if (pid > 0)
 					{
-						pid_list[++idx] = pid;
 						close(pipefd2[1]);
 						close(pipefd[0]);
+						pid_list[++idx] = pid;
 						dup2(pipefd2[0], pipefd[0]);
 						close(pipefd2[0]);
 					}
@@ -154,6 +151,7 @@ int			main(int argc, char **argv, char **envp)
 					if (pid > 0)
 					{
 						close(pipefd[0]);
+						close(pipefd_backup[1]);
 						pid_list[++idx] = pid;
 						idx = -1;
 						while (pid_list[++idx])
