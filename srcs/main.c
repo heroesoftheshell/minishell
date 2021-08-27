@@ -46,7 +46,6 @@ int			main(int argc, char **argv, char **envp)
 	int		pipefd2[2];
 	int		pipefd_backup[2];
 	char	**cmd_chunks;
-	// char	**parsed_chunk_data;
 	int		chunk_idx;
 	int		pid;
 	int		pid_list[BUFSIZ];
@@ -59,8 +58,8 @@ int			main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	init_env(envp);
-	// pipefd_backup[0] = dup(STDIN_FILENO);
-	// pipefd_backup[1] = dup(STDOUT_FILENO);
+	pipefd_backup[0] = dup(STDIN_FILENO);
+	pipefd_backup[1] = dup(STDOUT_FILENO);
 	rl_getc_function = custom_rl_getc_fuction;
 	rl_catch_signals = 0;
 	
@@ -88,7 +87,6 @@ int			main(int argc, char **argv, char **envp)
 				{
 					continue ;
 				}
-				// printf("redirections : %s\n", parsed_data->redirections);
 				if (parsed_data->redirections)
 				{
 					handle_redirection(parsed_data->redirections);
