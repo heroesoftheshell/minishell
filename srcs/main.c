@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 17:18:07 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 17:55:45 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ static void catch_function(int signo) {
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
+	rl_redisplay();
+}
+
+static void catch_function_in(int signo) {
+    (void)signo;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -59,8 +66,8 @@ int			main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	init_env(envp);
-	// pipefd_backup[0] = dup(STDIN_FILENO);
-	// pipefd_backup[1] = dup(STDOUT_FILENO);
+	pipefd_backup[0] = dup(STDIN_FILENO);
+	pipefd_backup[1] = dup(STDOUT_FILENO);
 	rl_getc_function = custom_rl_getc_fuction;
 	rl_catch_signals = 0;
 	
@@ -77,8 +84,7 @@ int			main(int argc, char **argv, char **envp)
 			break ;
 		else
 		{
-			signal(SIGINT, do_nothing);
-			// rl_on_new_line();
+			signal(SIGINT, catch_function_in);
 			cmd_chunks = line_parse((const char *)input);
 			chunk_idx = -1;
 			while (cmd_chunks && cmd_chunks[++chunk_idx] != NULL)
