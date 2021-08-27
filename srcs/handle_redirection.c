@@ -18,12 +18,48 @@ int		redirect_ouput(char *filename, bool is_append_mode)
 	return (SUCCESS);
 }
 
+int		exec_heredoc(int fd, const char *delimiter)
+{
+	char	*input;
+	char	*str;
+	char	*joined_str;
+
+	joined_str = NULL;
+	str = NULL;
+	while (1)
+	{
+		input = readline("\033[1;4;34;47m>\033[0m ");
+		if (ft_strcmp(input, delimiter) == 0)
+		{
+			write(fd, joined_str, ft_strlen(joined_str));
+			write(fd, "\n", 1);
+			break ;
+		}
+		else
+		{
+			if (joined_str)
+			{
+				str = ft_strjoin3(joined_str, "\n", input);
+				free(joined_str);
+				free(input);
+				joined_str = str;
+			}
+			else
+				joined_str = input;
+		}
+	}
+	return (SUCCESS);
+}
+
 int		redirect_input(char *filename, bool is_heredoc_mode)
 {
 	int	fd;
 
 	if (is_heredoc_mode)
-		fd = open(filename, O_RDONLY);
+	{
+		fd = open("./temp", O_RDWR | O_CREAT | O_TRUNC, 0644);
+		exec_heredoc(fd, filename);
+	}
 	else
 		fd = open(filename, O_RDONLY);
 	if (fd < 0)
