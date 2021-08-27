@@ -6,12 +6,11 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 15:30:33 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 16:12:41 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static void catch_function(int signo) {
     (void)signo;
@@ -81,6 +80,7 @@ int			main(int argc, char **argv, char **envp)
 			break ;
 		else
 		{
+			// signal(SIGINT, do_nothing);
 			rl_on_new_line();
 			cmd_chunks = line_parse((const char *)input);
 			chunk_idx = -1;
@@ -126,6 +126,8 @@ int			main(int argc, char **argv, char **envp)
 						close(pipefd[0]);
 						dup2(pipefd2[1], STDOUT_FILENO);
 						close(pipefd2[1]); // fd 교체
+						close(pipefd[1]);
+						close(pipefd2[0]);
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
@@ -133,7 +135,9 @@ int			main(int argc, char **argv, char **envp)
 					{
 						pid_list[++idx] = pid;
 						close(pipefd2[1]);
+						close(pipefd[0]);
 						dup2(pipefd2[0], pipefd[0]);
+						close(pipefd2[0]);
 					}
 				}
 				else if (is_pipe)
@@ -144,14 +148,13 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd[0], STDIN_FILENO);
 						close(pipefd[0]);
 						dup2(pipefd_backup[1], STDOUT_FILENO);
-						close(pipefd_backup[1]);
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
 					if (pid > 0)
 					{
+						close(pipefd[0]);
 						pid_list[++idx] = pid;
-						close(pipefd_backup[1]);
 						idx = -1;
 						while (pid_list[++idx])
 						{
@@ -187,6 +190,8 @@ int			main(int argc, char **argv, char **envp)
 			}
 			delete_split_strs(cmd_chunks);
 			add_history(input);
+			signal(SIGINT, catch_function);
+
 			free(input);
 		}
 	}
