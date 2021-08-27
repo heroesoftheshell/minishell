@@ -35,8 +35,10 @@ int		ft_strcmp(const char *s1, const char *s2)
 	// size_t	n;
 
 	// n = ft_strlen(s1) + 1;
-	if (s1 == NULL || s2 == NULL)
+	if (s1 == NULL && s2 == NULL)
 		return (0);
+	else if (s1 == NULL || s2 == NULL)
+		return (1);
 	while (1)
 	{
 		c1 = *s1++;
