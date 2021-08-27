@@ -6,13 +6,13 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/26 17:25:44 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 11:22:08 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#define STDIN_PIPE 0x1
-#define STDOUT_PIPE 0x2
+#define STDIN_PIPE 0x0
+#define STDOUT_PIPE 0x1
 
 void		exec_command(char *command, int pipefd[2], int flags)
 {
@@ -60,6 +60,7 @@ int			is_builtin(char *cmd)
 		!ft_strcmp(cmd, "env") ||
 		!ft_strcmp(cmd, "export") ||
 		!ft_strcmp(cmd, "unset") ||
+		!ft_strcmp(cmd, "$?") ||
 		!ft_strcmp(cmd, "pwd"))
 		return (1);
 	return (0);
@@ -113,15 +114,15 @@ int			main(int argc, char **argv, char **envp)
 				{
 					continue ;
 				}
-				printf("redirections : %s\n", parsed_data->redirections);
+				// printf("redirections : %s\n", parsed_data->redirections);
 				if (parsed_data->redirections)
 				{
 					handle_redirection(parsed_data->redirections);
 				}
-				if (cmd_chunks[1] != NULL || is_pipe)
+				if (cmd_chunks[chunk_idx + 1] != NULL)
 				{
-					is_pipe = 1;
 					pipe(pipefd);
+					is_pipe = 1;
 					pid = fork();
 					if (pid == 0) // child
 					{
@@ -147,7 +148,7 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd[0], STDIN_FILENO);
 						dup2(pipefd_backup[1], STDOUT_FILENO);
 						close(pipefd[0]);
-						close(pipefd[1]);
+						// close(pipefd[1]);
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
@@ -158,12 +159,13 @@ int			main(int argc, char **argv, char **envp)
 						idx = -1;
 						while (pid_list[++idx])
 						{
-							waitpid(pid_list[idx], &exit_status, WCONTINUED);
-							// ft_putnbr_fd(pid_list[idx], 2);
+							waitpid(pid_list[idx], &exit_status, 0);
 							if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
 								all()->end_code = WEXITSTATUS(exit_status);
 							pid_list[idx] = 0;
 						}
+						idx = -1;
+						is_pipe = 0;
 					}
 				}
 				else
