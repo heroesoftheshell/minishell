@@ -6,13 +6,13 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/26 17:25:44 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/27 09:42:58 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#define STDIN_PIPE 0x1
-#define STDOUT_PIPE 0x2
+#define STDIN_PIPE 0x0
+#define STDOUT_PIPE 0x1
 
 void		exec_command(char *command, int pipefd[2], int flags)
 {
