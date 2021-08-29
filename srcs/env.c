@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/24 14:01:22 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/29 21:47:18 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ char	*get_env_variable(const char *env_key)
 	ret = NULL;
 	if (env_key == NULL)
 		return (NULL);
+	if (!validate_env_key((char *)env_key, 0))
+		return (ft_strjoin("$", env_key));
 	current = all()->envp;
 	while (current)
 	{

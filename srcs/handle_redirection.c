@@ -51,6 +51,18 @@ int		exec_heredoc(int fd, const char *delimiter)
 	return (SUCCESS);
 }
 
+void		clear_temp(void)
+{
+	char **argv;
+
+	argv = malloc(sizeof(char *) * 3);
+	argv[0] = "-f";
+	argv[1] = "./temp";
+	argv[2] = NULL;
+	if (fork() == 0)
+		execve("/bin/rm", (char *const *)argv, NULL);
+}
+
 int		redirect_input(char *filename, bool is_heredoc_mode)
 {
 	int	fd;
@@ -59,6 +71,8 @@ int		redirect_input(char *filename, bool is_heredoc_mode)
 	{
 		fd = open("./temp", O_RDWR | O_CREAT | O_TRUNC, 0644);
 		exec_heredoc(fd, filename);
+		close(fd);
+		fd = open("./temp", O_RDONLY);
 	}
 	else
 		fd = open(filename, O_RDONLY);
@@ -69,6 +83,8 @@ int		redirect_input(char *filename, bool is_heredoc_mode)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	if(is_heredoc_mode)
+		clear_temp();
 	return (SUCCESS);
 }
 
@@ -106,6 +122,8 @@ int		handle_redirection(const char *redirections)
 	int		idx;
 	int		err_chk;
 
+	if (redirections == NULL)
+		return (FAIL);
 	splitted_red = ft_split(redirections, ',');
 	if (splitted_red == NULL)
 		return (FAIL);
@@ -113,6 +131,8 @@ int		handle_redirection(const char *redirections)
 	while (splitted_red[++idx])
 	{
 		err_chk = classify_redirection_type(splitted_red[idx]);
+		if (err_chk != SUCCESS)
+			return (err_chk);
 	}
 	return (err_chk);
 }
