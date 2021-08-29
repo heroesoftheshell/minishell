@@ -18,5 +18,6 @@ void	delete_parsed_data(t_parse_data *p_data)
 	{
 		free((p_data->cmd)[idx]);
 	}
+	free(p_data->cmd);
 	free(p_data);
 }

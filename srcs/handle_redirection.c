@@ -134,5 +134,6 @@ int		handle_redirection(const char *redirections)
 		if (err_chk != SUCCESS)
 			return (err_chk);
 	}
+	delete_split_strs(splitted_red);
 	return (err_chk);
 }

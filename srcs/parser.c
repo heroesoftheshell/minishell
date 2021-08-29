@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/23 08:45:41 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/29 22:39:43 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,18 @@ static int	validate_redirect_expression(const char **str, char start_c)
 				print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
 				return (NEWLINE_SYNTAX_ERR);
 			}
-			else if (!is_redirect_sign(**str) && ft_isprint(**str))
-				return (SUCCESS);
 		}
+		if (is_redirect_sign(**str))
+		{
+			print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
+			return (REDIRECT_SYNTAX_ERR);
+		}
+		else if (ft_isprint(**str))
+			return (SUCCESS);
 	}
-	return (SUCCESS);
+	else if (ft_isprint(**str))
+		return (SUCCESS);
+	return (FAIL);
 }
 
 static int	validate_cmd_chunk(const char *chunk)
