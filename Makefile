@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
+#    By: ghong <ghong@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/08/26 15:09:02 by hekang           ###   ########.fr        #
+#    Updated: 2021/08/30 01:59:02 by ghong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS	= main env cmd ft_chdir ft_echo ft_pwd all ft_export ft_unset validate_env_
 		handle_redirection
 LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy ft_lstnew ft_lstadd_back\
 		ft_lstlast ft_putendl_fd ft_lstsize ft_strdup ft_isalpha ft_isdigit ft_putnbr_fd ft_putchar_fd ft_putstr_fd\
-		ft_isspace ft_substr ft_isprint ft_strchr ft_bzero ft_atoi ft_strnstr
+		ft_isspace ft_substr ft_isprint ft_strchr ft_bzero ft_atoi ft_strnstr ft_itoa
 OBJS	= $(FIL:.c=.o)
 INCS	= -I./includes
 UNAME_S := $(shell uname -s)

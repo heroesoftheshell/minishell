@@ -123,7 +123,7 @@ int		handle_redirection(const char *redirections)
 	int		err_chk;
 
 	if (redirections == NULL)
-		return (FAIL);
+		return (SUCCESS);
 	splitted_red = ft_split(redirections, ',');
 	if (splitted_red == NULL)
 		return (FAIL);
@@ -132,7 +132,10 @@ int		handle_redirection(const char *redirections)
 	{
 		err_chk = classify_redirection_type(splitted_red[idx]);
 		if (err_chk != SUCCESS)
+		{
+			delete_split_strs(splitted_red);
 			return (err_chk);
+		}
 	}
 	delete_split_strs(splitted_red);
 	return (err_chk);
