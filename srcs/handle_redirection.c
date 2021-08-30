@@ -120,15 +120,15 @@ int		classify_redirection_type(char *str)
 	return (FAIL);
 }
 
-int		handle_redirection(const char *redirections)
+int		handle_redirection(t_parse_data *parsed_data)
 {
 	char	**splitted_red;
 	int		idx;
 	int		err_chk;
 
-	if (redirections == NULL)
+	if (parsed_data->redirections == NULL)
 		return (SUCCESS);
-	splitted_red = ft_split(redirections, ',');
+	splitted_red = ft_split(parsed_data->redirections, ',');
 	if (splitted_red == NULL)
 		return (FAIL);
 	idx = -1;
@@ -138,6 +138,7 @@ int		handle_redirection(const char *redirections)
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);
+			delete_parsed_data(parsed_data);
 			return (err_chk);
 		}
 	}
