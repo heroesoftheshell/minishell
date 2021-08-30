@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 20:52:27 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 23:22:59 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 11:01:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 size_t	ft_strlcpy(char *restrict dst, const char *src,
 		size_t dstsize)
 {
-	size_t cnt;
+	size_t	cnt;
 
 	cnt = 0;
 	if (dst == NULL && src == NULL)

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/02 22:40:21 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/15 14:29:42 by hekang           ###   ########.fr       */
+/*   Created: 2021/08/30 10:54:04 by hekang            #+#    #+#             */
+/*   Updated: 2021/08/30 10:54:33 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_digit(const char *str)
 	cnt = 0;
 	i = 0;
 	minus = 1;
-	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' ||
+	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' || \
 			str[cnt] == '\v' || str[cnt] == '\f' || str[cnt] == '\r')
 		cnt++;
 	if (str[cnt] == '+' || str[cnt] == '-')
@@ -47,12 +47,12 @@ int	ft_atoi(const char *str)
 	int					minus;
 
 	if (check_digit(str) >= 20 || check_digit(str) <= -20)
-		return (check_digit(str) > 0 ? -1 : 0);
+		return (-1);
 	cnt = 0;
 	minus = 1;
 	result = 0;
-	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' ||
-			str[cnt] == '\v' || str[cnt] == '\f' || str[cnt] == '\r')
+	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' || \
+		str[cnt] == '\v' || str[cnt] == '\f' || str[cnt] == '\r')
 		cnt++;
 	if (str[cnt] == '+' || str[cnt] == '-')
 	{
