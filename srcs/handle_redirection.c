@@ -10,8 +10,10 @@ int		redirect_ouput(char *filename, bool is_append_mode)
 		fd = open (filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		perror("\033[1;4;34;47mHOS >\033[0m ");
-		return (FAIL);
+		all()->end_code = 1;
+		ft_putstr_fd("\033[1;4;34;47mHOS:\033[0m ", STDERR_FILENO);
+		perror(filename);
+		exit(all()->end_code);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -78,8 +80,10 @@ int		redirect_input(char *filename, bool is_heredoc_mode)
 		fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		perror("\033[1;4;34;47mHOS >\033[0m ");
-		return (FAIL);
+		all()->end_code = 1;
+		ft_putstr_fd("\033[1;4;34;47mHOS:\033[0m ", STDERR_FILENO);
+		perror(filename);
+		exit(all()->end_code);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);

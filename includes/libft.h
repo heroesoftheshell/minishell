@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 17:26:17 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 12:43:05 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 15:55:49 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,6 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *), \
 size_t				ft_strnum(char *s, char c);
 char				*ft_strjoin3(char const *s1, char const *s2, \
 					char const *s3);
+char				*ft_strjoin_free_a(char *s1, char const *s2);
+
 #endif

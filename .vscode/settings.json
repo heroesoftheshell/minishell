@@ -5,6 +5,7 @@
         "readline.h": "c",
         "minishell.h": "c",
         "termios.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "__errc": "cpp"
     }
 }

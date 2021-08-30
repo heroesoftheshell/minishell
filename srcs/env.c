@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 02:19:16 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/30 15:24:42 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	init_env(char **envp)
 	int	cnt;
 
 	cnt = -1;
-
 	while (envp[++cnt])
 	{
 		if (cnt == 0)
@@ -35,7 +34,8 @@ void	ft_env(void)
 	temp = (all()->envp);
 	while (temp)
 	{
-		if (ft_strnstr((char *)temp->content, "=", ft_strlen((char *)temp->content)))
+		if (ft_strnstr((char *)temp->content, "=" \
+		, ft_strlen((char *)temp->content)))
 			ft_putendl_fd((char *)(temp->content), STDOUT_FILENO);
 		temp = temp->next;
 	}
