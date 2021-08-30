@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
+#    By: heom <heom@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/02 12:36:58 by hekang            #+#    #+#              #
-#    Updated: 2021/08/30 16:33:27 by hekang           ###   ########.fr        #
+#    Updated: 2021/08/30 17:48:46 by heom             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ RM 		= rm -f
 
 SRCS	= main env cmd ft_chdir ft_echo ft_pwd all ft_export ft_unset validate_env_key ft_print_endcode\
 		err_msg parse_utility cmdline_split cmdline_split_util parser ft_exit signal parse_utility2\
-		handle_redirection check_env_key
+		handle_redirection check_env_key validate_redirect_expression conv_env_var
 LIBFT	= ft_split ft_strncmp ft_strjoin ft_strlen ft_memcpy ft_calloc ft_memset ft_strlcpy ft_lstnew ft_lstadd_back\
 		ft_lstlast ft_putendl_fd ft_lstsize ft_strdup ft_isalpha ft_isdigit ft_putnbr_fd ft_putchar_fd ft_putstr_fd\
 		ft_isspace ft_substr ft_isprint ft_strchr ft_bzero ft_atoi ft_strnstr ft_itoa
