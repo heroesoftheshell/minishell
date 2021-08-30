@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:23:51 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 11:03:20 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 13:22:21 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strnum(char *s, char c)
 
 	num = 0;
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 	{
 		if (s[i] != c)
 		{
@@ -51,9 +51,6 @@ void	str_malloc_copy(char *s, char c, size_t num, char **res)
 			while (s[i + len] != c && s[i + len])
 				len++;
 			res[x] = ft_calloc(sizeof(char), len + 1);
-			while (res[cnt])
-				free(res[cnt++]);
-			return ;
 			ft_strlcpy(res[x++], s + i, len + 1);
 		}
 		if (len == 0)
