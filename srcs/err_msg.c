@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_msg.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:07:28 by ghong             #+#    #+#             */
-/*   Updated: 2021/07/06 13:35:14 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/30 16:04:58 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,8 @@ void	print_err_msg(int err_type, const char *str, char c)
 			ft_putstr_fd((char *)str, STDERR_FILENO);
 		ft_putendl_fd(SYNTAX_ERR_MSG_TAIL, STDERR_FILENO);
 	}
-	else if (err_type == COMMAND_NOT_FOUND)
-	{
-
-	}
-	else if (err_type == QUOTE_EXIT_ERR)
-	{
+	else 
 		ft_putendl_fd((char *)str, STDERR_FILENO);
-	}
 }
 
 void	print_system_err(const char *str)

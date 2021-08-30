@@ -3,81 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/29 22:39:43 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/30 17:40:29 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	validate_redirect_expression(const char **str, char start_c)
-{
-	bool	contain_space;
-
-	contain_space = false;
-	// FIXME: duplicated logic
-	(*str)++;
-	if (ft_isspace(**str))
-	{
-		contain_space = true;
-		skip_space(str);
-		if (**str == 0)
-		{
-			print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
-			return (NEWLINE_SYNTAX_ERR);
-		}
-	}
-	if (contain_space)
-	{
-		if (is_redirect_sign(**str))
-		{
-			print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
-			return (REDIRECT_SYNTAX_ERR);
-		}
-		return (SUCCESS);
-	}
-	if (**str == 0)
-	{
-		print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
-		return (NEWLINE_SYNTAX_ERR);
-	}
-	else if (is_redirect_sign(**str) && start_c != **str)
-	{
-		print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
-		return (REDIRECT_SYNTAX_ERR);
-	}
-	else if (is_redirect_sign(**str) && start_c == **str)
-	{
-		// FIXME: duplicated logic
-		(*str)++;
-		if (**str == 0)
-		{
-			print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
-			return (NEWLINE_SYNTAX_ERR);
-		}
-		else if (ft_isspace(**str))
-		{
-			skip_space(str);
-			if (**str == 0)
-			{
-				print_err_msg(NEWLINE_SYNTAX_ERR, "newline", 0);
-				return (NEWLINE_SYNTAX_ERR);
-			}
-		}
-		if (is_redirect_sign(**str))
-		{
-			print_err_msg(REDIRECT_SYNTAX_ERR, NULL, **str);
-			return (REDIRECT_SYNTAX_ERR);
-		}
-		else if (ft_isprint(**str))
-			return (SUCCESS);
-	}
-	else if (ft_isprint(**str))
-		return (SUCCESS);
-	return (FAIL);
-}
 
 static int	validate_cmd_chunk(const char *chunk)
 {
@@ -96,7 +29,7 @@ static int	validate_cmd_chunk(const char *chunk)
 	return (SUCCESS);
 }
 
-char		**line_parse(const char *line)
+char	**line_parse(const char *line)
 {
 	char	**pipe_cmd_chunk;
 	int		str_index;
@@ -120,49 +53,7 @@ char		**line_parse(const char *line)
 	return (pipe_cmd_chunk);
 }
 
-static char	*conv_env_var(const char **src, int str_idx, int *char_idx,\
-	bool is_inside_quote)
-{
-	char			*env_key;
-	char			*env_value;
-	size_t			str_len;
-	unsigned int	start_char_idx;
-
-	start_char_idx = *char_idx + 1;
-	str_len = 0;
-	while (src[str_idx][++(*char_idx)])
-	{
-		if (is_quote(src[str_idx][*char_idx]) ||\
-			ft_isspace(src[str_idx][*char_idx]))
-		{
-			if (!is_inside_quote)
-				--(*char_idx);
-			if (str_len == 0)
-				return (ft_strdup("$"));
-			env_key = ft_substr(src[str_idx], start_char_idx, str_len);
-			env_value = get_env_variable((const char *)env_key);
-			if (env_key)
-				free(env_key);
-			return (env_value);
-		}
-		str_len++;
-	}
-	if (is_inside_quote)
-		return (NULL);
-	else
-	{
-		if (str_len == 0)
-			return (ft_strdup("$"));
-		env_key = ft_substr(src[str_idx], start_char_idx, str_len);
-		env_value = get_env_variable((const char *)env_key);
-		if (env_key)
-			free(env_key);
-		return (env_value);
-	}
-	return (NULL);
-}
-
-static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
+static char	*parse_quote_str(const char **src, char quote_char, int str_idx, \
 				int *char_idx)
 {
 	char			*converted_str;
@@ -183,11 +74,11 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 			if (*char_idx - start_char_idx > 0)
 			{
 				if (converted_str == NULL)
-					converted_str = ft_substr(src[str_idx], start_char_idx,\
+					converted_str = ft_substr(src[str_idx], start_char_idx, \
 						*char_idx - start_char_idx);
 				else
 				{
-					substr = ft_substr(src[str_idx], start_char_idx,\
+					substr = ft_substr(src[str_idx], start_char_idx, \
 						*char_idx - start_char_idx);
 					joined_str = ft_strjoin(converted_str, substr);
 					free(converted_str);
@@ -224,12 +115,12 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 		{
 			if (converted_str == NULL)
 			{
-				converted_str = ft_substr(src[str_idx], start_char_idx,\
+				converted_str = ft_substr(src[str_idx], start_char_idx, \
 					*char_idx - start_char_idx);
 			}
 			else
 			{
-				substr = ft_substr(src[str_idx], start_char_idx,\
+				substr = ft_substr(src[str_idx], start_char_idx, \
 					*char_idx - start_char_idx);
 				joined_str = ft_strjoin(converted_str, substr);
 				free(converted_str);
@@ -243,7 +134,7 @@ static char	*parse_quote_str(const char **src, char quote_char, int str_idx,\
 	return (NULL);
 }
 
-int			switch_str_to_handled_quote_str(char **splitted_data,\
+int	switch_str_to_handled_quote_str(char **splitted_data, \
 				int str_idx)
 {
 	// FIXME: string variables should change structure type
@@ -262,9 +153,9 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 	{
 		if (is_quote(splitted_data[str_idx][char_idx]))
 		{
-			substr = ft_substr(splitted_data[str_idx], start_idx,\
+			substr = ft_substr(splitted_data[str_idx], start_idx, \
 						char_idx - start_idx);
-			quote_str = parse_quote_str((const char **)splitted_data,\
+			quote_str = parse_quote_str((const char **)splitted_data, \
 					splitted_data[str_idx][char_idx], str_idx, &char_idx);
 			if (quote_str == NULL)
 			{
@@ -289,14 +180,15 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 		}
 		else if (splitted_data[str_idx][char_idx] == '$')
 		{
-			substr = ft_substr(splitted_data[str_idx], start_idx,\
+			substr = ft_substr(splitted_data[str_idx], start_idx, \
 					char_idx - start_idx);
 			if (converted_str)
 			{
 				joined_str = ft_strjoin(converted_str, substr);
 				free(converted_str);
 				free(substr);
-				substr = conv_env_var((const char **)splitted_data, str_idx, &char_idx, false);
+				substr = conv_env_var((const char **)splitted_data, \
+					str_idx, &char_idx, false);
 				if (substr)
 				{
 					converted_str = ft_strjoin(joined_str, substr);
@@ -310,7 +202,8 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 			}
 			else
 			{
-				converted_str = conv_env_var((const char **)splitted_data, str_idx, &char_idx, false);
+				converted_str = conv_env_var((const char **)splitted_data, \
+					str_idx, &char_idx, false);
 				if (converted_str == NULL)
 					converted_str = ft_strdup("\0");
 				joined_str = ft_strjoin(substr, converted_str);
@@ -323,7 +216,7 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 	}
 	if (converted_str)
 	{
-		substr = ft_substr(splitted_data[str_idx], start_idx,\
+		substr = ft_substr(splitted_data[str_idx], start_idx, \
 				char_idx - start_idx);
 		joined_str = ft_strjoin(converted_str, substr);
 		free(converted_str);
@@ -334,7 +227,8 @@ int			switch_str_to_handled_quote_str(char **splitted_data,\
 	return (SUCCESS);
 }
 
-int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
+int	divide_redirection(const char **splitted_data, \
+				t_parse_data *parsed_data)
 {
 	int		sd_idx;
 	int		cmd_count;
@@ -358,7 +252,8 @@ int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
 			{
 				if (parsed_data->redirections)
 				{
-					joined_str = ft_strjoin3(parsed_data->redirections, ",", splitted_data[sd_idx]);
+					joined_str = ft_strjoin3(parsed_data->redirections, \
+						",", splitted_data[sd_idx]);
 					free(parsed_data->redirections);
 					parsed_data->redirections = joined_str;
 				}
@@ -367,10 +262,12 @@ int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
 			}
 			else
 			{
-				complete_red_str = ft_strjoin(splitted_data[sd_idx], splitted_data[sd_idx + 1]);
+				complete_red_str = ft_strjoin(splitted_data[sd_idx], \
+					splitted_data[sd_idx + 1]);
 				if (parsed_data->redirections)
 				{
-					joined_str = ft_strjoin3(parsed_data->redirections, ",", complete_red_str);
+					joined_str = ft_strjoin3(parsed_data->redirections, \
+						",", complete_red_str);
 					free(complete_red_str);
 					free(parsed_data->redirections);
 					parsed_data->redirections = joined_str;
@@ -387,7 +284,7 @@ int			divide_redirection(const char **splitted_data, t_parse_data *parsed_data)
 	return (SUCCESS);
 }
 
-t_parse_data		*cmd_chunk_parse(const char *chunk)
+t_parse_data	*cmd_chunk_parse(const char *chunk)
 {
 	t_parse_data	*parsed_data;
 	char			**splitted_data;
