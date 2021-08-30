@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 14:42:05 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 16:45:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,6 @@ int			main(int argc, char **argv, char **envp)
 						else
 						{
 							waitpid(pid, &exit_status, WCONTINUED);
-							// all()->end_code = exit_status;
-							// if (WIFEXITED(exit_status))
 							all()->end_code = WEXITSTATUS(exit_status);
 						}
 					}
