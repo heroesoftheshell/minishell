@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:42:52 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/07 20:18:43 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 11:09:50 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,32 @@ void	checkminus(int n, char *str)
 		str[0] = '-';
 }
 
+long	returnvalue(int n)
+{
+	if (n < 0)
+		return (-n);
+	else
+		return (n);
+}
+
 char	*ft_itoa(int n)
 {
 	long	value;
 	int		len;
 	char	*str;
 
-	len = n < 1 ? 1 : 0;
-	value = n < 0 ? -(long)n : (long)n;
+	len = 0;
+	if (n < 1)
+		len = 1;
+	value = returnvalue(n);
 	while (value != 0)
 	{
 		value = value / 10;
 		len++;
 	}
-	if (!(str = (char *)malloc((len + 1) * sizeof(char))))
-		return (0);
+	str = (char *)malloc((len + 1) * sizeof(char));
 	str[len] = '\0';
-	value = n < 0 ? -(long)n : (long)n;
+	value = returnvalue(n);
 	while (len > 0)
 	{
 		str[len - 1] = value % 10 + '0';

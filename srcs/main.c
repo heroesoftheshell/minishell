@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 02:50:07 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/30 12:50:59 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,6 @@ int			main(int argc, char **argv, char **envp)
 			delete_split_strs(cmd_chunks);
 			add_history(input);
 			signal(SIGINT, catch_function);
-
 			free(input);
 		}
 	}

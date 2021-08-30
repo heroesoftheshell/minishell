@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 00:39:26 by hekang            #+#    #+#             */
-/*   Updated: 2021/03/18 11:26:37 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 11:04:32 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,9 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void *str;
+	void	*str;
 
-	if (!(str = (void *)malloc(count * size)))
-	{
-		write(1, "Error\n ** Malloc Error **\n", 26);
-		exit(EXIT_SUCCESS);
-	}
+	str = (void *)malloc(count * size);
 	if (str == 0)
 		return (0);
 	ft_memset(str, 0, count * size);

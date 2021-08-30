@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 17:19:16 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/07 19:36:38 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 10:56:23 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	int cnt;
+	int	cnt;
 
 	if (s == 0)
 		return ;

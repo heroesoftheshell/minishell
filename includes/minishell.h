@@ -6,23 +6,22 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/24 11:15:16 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 11:16:46 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <unistd.h>
-// #include <readline/readline.h>
-#include <readline/history.h>
-#include "readline.h"
-#include <string.h>
-#include <signal.h>
-#include <fcntl.h>
-#include "libft.h"
+# include <stdlib.h>
+# include <stdio.h>
+# include <stdbool.h>
+# include <unistd.h>
+# include <readline/history.h>
+# include "readline.h"
+# include <string.h>
+# include <signal.h>
+# include <fcntl.h>
+# include "libft.h"
 # define SYNTAX_ERR_MSG_HEADER	"hosh: syntax error near unexpected token `"
 # define SYNTAX_ERR_MSG_TAIL	"'"
 
@@ -39,13 +38,13 @@ enum	e_err_type
 	FAIL
 };
 
-typedef struct	s_all
+typedef struct s_all
 {
 	t_list		*envp;
 	int			end_code;
 }				t_all;
 
-typedef struct	s_parsed_data
+typedef struct s_parsed_data
 {
 	char		*redirections;
 	char		**cmd;
@@ -60,7 +59,7 @@ void			set_env_variable(const char *env_key, const char *env_value);
 void			run_cmd(char **chunk);
 void			ft_chdir(char **cmd);
 void			ft_echo(char **cmd);
-void			ft_pwd();
+void			ft_pwd(void);
 
 void			delete_split_strs(char **str);
 void			delete_parsed_data(t_parse_data *p_data);
@@ -76,7 +75,7 @@ void			ft_env(void);
 void			init_env(char **envp);
 void			ft_export(char **cmd);
 void			ft_unset(char **cmd);
-int				validate_env_key(char* key, int unset_key);
+int				validate_env_key(char *key, int unset_key);
 void			ft_print_endcode(void);
 void			ft_exit(char *exit_code);
 
@@ -85,6 +84,5 @@ t_parse_data	*cmd_chunk_parse(const char *chunk);
 bool			is_include_filename_in_redirect(const char *str);
 int				custom_rl_getc_fuction(FILE *stream);
 int				handle_redirection(const char *redirections);
-
 
 #endif
