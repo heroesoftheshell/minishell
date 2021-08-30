@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 17:55:45 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 02:50:07 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int			main(int argc, char **argv, char **envp)
 	t_parse_data	*parsed_data;
 	int		idx;
 	int		backup_fd;
+	int		err_chk;
 
 	(void)argc;
 	(void)argv;
@@ -93,10 +94,6 @@ int			main(int argc, char **argv, char **envp)
 				{
 					continue ;
 				}
-				if (parsed_data->redirections)
-				{
-					handle_redirection(parsed_data->redirections);
-				}
 				if (cmd_chunks[chunk_idx + 1] != NULL && is_pipe != 1)
 				{
 					is_pipe = 1;
@@ -108,6 +105,12 @@ int			main(int argc, char **argv, char **envp)
 						close(pipefd[0]);
 						dup2(pipefd[1], STDOUT_FILENO);
 						close(pipefd[1]); // fd 교체
+						err_chk = handle_redirection(parsed_data->redirections);
+						if (err_chk != SUCCESS)
+						{
+							delete_parsed_data(parsed_data);
+							continue;
+						}
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
@@ -129,6 +132,12 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd2[1], STDOUT_FILENO);
 						close(pipefd2[1]); // fd 교체
 						close(pipefd2[0]);
+						err_chk = handle_redirection(parsed_data->redirections);
+						if (err_chk != SUCCESS)
+						{
+							delete_parsed_data(parsed_data);
+							continue;
+						}
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
@@ -149,6 +158,12 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd[0], STDIN_FILENO);
 						close(pipefd[0]);
 						dup2(pipefd_backup[1], STDOUT_FILENO);
+						err_chk = handle_redirection(parsed_data->redirections);
+						if (err_chk != SUCCESS)
+						{
+							delete_parsed_data(parsed_data);
+							continue;
+						}
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
 					}
@@ -173,13 +188,27 @@ int			main(int argc, char **argv, char **envp)
 				{
 					if (is_builtin((parsed_data->cmd)[0]))
 					{
+						err_chk = handle_redirection(parsed_data->redirections);
+						if (err_chk != SUCCESS)
+						{
+							delete_parsed_data(parsed_data);
+							continue;
+						}
 						run_cmd(parsed_data->cmd);
 					}
 					else
 					{
 						pid = fork();
 						if (pid == 0)
+						{
+							err_chk = handle_redirection(parsed_data->redirections);
+							if (err_chk != SUCCESS)
+							{
+								delete_parsed_data(parsed_data);
+								continue;
+							}
 							run_cmd(parsed_data->cmd);
+						}
 						else
 						{
 							waitpid(pid, &exit_status, WCONTINUED);

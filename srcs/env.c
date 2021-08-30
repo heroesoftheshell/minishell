@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/24 14:01:22 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 02:19:16 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ char	*get_env_path(void)
 		if (!ft_strcmp("PATH", split[0]))
 			ret = ft_strdup(split[1]);
 		current = current->next;
+		delete_split_strs(split);
 	}
-	delete_split_strs(split);
 	return (ret);
 }
 
@@ -73,8 +73,8 @@ void	set_env_variable(const char *env_key, const char *env_value)
 		if (!ft_strcmp(env_key, split[0]))
 			current->content = ft_strjoin3(env_key, "=", env_value);
 		current = current->next;
+		delete_split_strs(split);
 	}
-	delete_split_strs(split);
 }
 
 char	*get_env_variable(const char *env_key)
@@ -82,10 +82,20 @@ char	*get_env_variable(const char *env_key)
 	t_list		*current;
 	char		**split;
 	char		*ret;
+	char		*itoa_result;
 
 	ret = NULL;
 	if (env_key == NULL)
 		return (NULL);
+	if (!ft_strncmp("?", env_key, 1))
+	{
+		itoa_result = ft_itoa(all()->end_code);
+		ret = ft_strjoin(itoa_result, &env_key[1]);
+		free(itoa_result);
+		return (ret);
+	}
+	if (!validate_env_key((char *)env_key, 0))
+		return (ft_strjoin("$", env_key));
 	current = all()->envp;
 	while (current)
 	{
@@ -95,7 +105,7 @@ char	*get_env_variable(const char *env_key)
 		if (!ft_strcmp(env_key, split[0]))
 			ret = ft_strdup(split[1]);
 		current = current->next;
+		delete_split_strs(split);
 	}
-	delete_split_strs(split);
 	return (ret);
 }

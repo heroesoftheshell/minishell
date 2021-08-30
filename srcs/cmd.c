@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/27 17:17:53 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 02:46:44 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void		run_cmd(char **chunk)
 	char		**split_path;
 	int			cnt;
 	char		**env;
+	char		*exec_path;
 
 	cnt = -1;
 	if (!ft_strcmp(chunk[0], "cd"))
@@ -67,7 +68,11 @@ void		run_cmd(char **chunk)
 		split_path = ft_split(path, ':');
 		cnt = -1;
 		while (split_path[++cnt])
-			execve(ft_strjoin3(split_path[cnt], "/", chunk[0]), chunk, env);
+		{
+			exec_path = ft_strjoin3(split_path[cnt], "/", chunk[0]);
+			execve(exec_path, chunk, env);
+			free(exec_path);
+		}
 		execve(chunk[0], chunk, env);
 		ft_print_cmd_error(chunk[0]);
 		free(env);
