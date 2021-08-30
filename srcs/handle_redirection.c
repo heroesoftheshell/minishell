@@ -20,7 +20,7 @@ int		redirect_ouput(char *filename, bool is_append_mode)
 	return (SUCCESS);
 }
 
-int		exec_heredoc(int fd, const char *delimiter)
+int		exec_heredoc(int fd, const char *delimiter, int stdin_fd)
 {
 	char	*input;
 	char	*str;
@@ -28,6 +28,7 @@ int		exec_heredoc(int fd, const char *delimiter)
 
 	joined_str = NULL;
 	str = NULL;
+	dup2(stdin_fd, STDIN_FILENO);
 	while (1)
 	{
 		input = readline("\033[1;4;34;47m>\033[0m ");
@@ -35,6 +36,8 @@ int		exec_heredoc(int fd, const char *delimiter)
 		{
 			write(fd, joined_str, ft_strlen(joined_str));
 			write(fd, "\n", 1);
+			free(joined_str);
+			free(input);
 			break ;
 		}
 		else
@@ -55,26 +58,39 @@ int		exec_heredoc(int fd, const char *delimiter)
 
 void		clear_temp(void)
 {
-	char **argv;
+	char	**argv;
+	pid_t	pid;
+	int		exit_status;
 
 	argv = malloc(sizeof(char *) * 3);
 	argv[0] = "-f";
 	argv[1] = "./temp";
 	argv[2] = NULL;
-	if (fork() == 0)
+	pid = fork();
+	if (pid == 0)
+	{
 		execve("/bin/rm", (char *const *)argv, NULL);
+		exit(0);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &exit_status, 0);
+		if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
+			all()->end_code = WEXITSTATUS(exit_status);
+	}
+	free(argv);
 }
 
-int		redirect_input(char *filename, bool is_heredoc_mode)
+int		redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
 {
 	int	fd;
 
 	if (is_heredoc_mode)
 	{
 		fd = open("./temp", O_RDWR | O_CREAT | O_TRUNC, 0644);
-		exec_heredoc(fd, filename);
+		exec_heredoc(fd, filename, stdin_fd);
 		close(fd);
-		fd = open("./temp", O_RDONLY);
+		fd = open("./temp", O_RDONLY, 0644);
 	}
 	else
 		fd = open(filename, O_RDONLY);
@@ -92,7 +108,7 @@ int		redirect_input(char *filename, bool is_heredoc_mode)
 	return (SUCCESS);
 }
 
-int		classify_redirection_type(char *str)
+int		classify_redirection_type(char *str, int stdin_fd)
 {
 	int	idx;
 	int	err_chk;
@@ -111,16 +127,16 @@ int		classify_redirection_type(char *str)
 		else if (str[idx] == '<')
 		{
 			if (str[idx + 1] == '<')
-				err_chk = redirect_input(&(str[idx + 2]), true);
+				err_chk = redirect_input(&(str[idx + 2]), true, stdin_fd);
 			else
-				err_chk = redirect_input(&(str[idx + 1]), false);
+				err_chk = redirect_input(&(str[idx + 1]), false, stdin_fd);
 			return (err_chk);
 		}
 	}
 	return (FAIL);
 }
 
-int		handle_redirection(t_parse_data *parsed_data)
+int		handle_redirection(t_parse_data *parsed_data, int stdin_fd)
 {
 	char	**splitted_red;
 	int		idx;
@@ -134,7 +150,7 @@ int		handle_redirection(t_parse_data *parsed_data)
 	idx = -1;
 	while (splitted_red[++idx])
 	{
-		err_chk = classify_redirection_type(splitted_red[idx]);
+		err_chk = classify_redirection_type(splitted_red[idx], stdin_fd);
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);

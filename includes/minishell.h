@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 18:07:36 by heom             ###   ########.fr       */
+/*   Updated: 2021/08/31 02:22:01 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <sys/wait.h>
 # include "libft.h"
 # define SYNTAX_ERR_MSG_HEADER	"hosh: syntax error near unexpected token `"
 # define SYNTAX_ERR_MSG_TAIL	"'"
@@ -84,7 +85,7 @@ char			**line_parse(const char *line);
 t_parse_data	*cmd_chunk_parse(const char *chunk);
 bool			is_include_filename_in_redirect(const char *str);
 int				custom_rl_getc_fuction(FILE *stream);
-int				handle_redirection(t_parse_data *parsed_data);
+int				handle_redirection(t_parse_data *parsed_data, int stdin_fd);
 int				check_env_key(char *cmd);
 int				validate_redirect_expression(const char **str, char start_c);
 char			*conv_env_var(const char **src, int str_idx, int *char_idx, \

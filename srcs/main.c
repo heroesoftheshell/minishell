@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:22:47 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 18:06:43 by heom             ###   ########.fr       */
+/*   Updated: 2021/08/30 21:03:19 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int			main(int argc, char **argv, char **envp)
 						close(pipefd[0]);
 						dup2(pipefd[1], STDOUT_FILENO);
 						close(pipefd[1]); // fd 교체
-						if (handle_redirection(parsed_data))
+						if (handle_redirection(parsed_data, pipefd_backup[0]))
 							continue;
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
@@ -126,7 +126,7 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd2[1], STDOUT_FILENO);
 						close(pipefd2[1]); // fd 교체
 						close(pipefd2[0]);
-						if (handle_redirection(parsed_data))
+						if (handle_redirection(parsed_data, pipefd_backup[0]))
 							continue;
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
@@ -148,7 +148,7 @@ int			main(int argc, char **argv, char **envp)
 						dup2(pipefd[0], STDIN_FILENO);
 						close(pipefd[0]);
 						dup2(pipefd_backup[1], STDOUT_FILENO);
-						if (handle_redirection(parsed_data))
+						if (handle_redirection(parsed_data, pipefd_backup[0]))
 							continue;
 						run_cmd(parsed_data->cmd);
 						exit(all()->end_code);
@@ -174,7 +174,7 @@ int			main(int argc, char **argv, char **envp)
 				{
 					if (is_builtin((parsed_data->cmd)[0]))
 					{
-						if (handle_redirection(parsed_data))
+						if (handle_redirection(parsed_data, pipefd_backup[0]))
 							continue;
 						run_cmd(parsed_data->cmd);
 					}
@@ -183,7 +183,7 @@ int			main(int argc, char **argv, char **envp)
 						pid = fork();
 						if (pid == 0)
 						{
-							if (handle_redirection(parsed_data))
+							if (handle_redirection(parsed_data, pipefd_backup[0]))
 								continue;
 							run_cmd(parsed_data->cmd);
 						}
