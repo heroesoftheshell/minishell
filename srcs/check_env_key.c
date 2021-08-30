@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 16:30:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 16:30:56 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/30 16:44:54 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,21 @@ int	push_value(char *key, char *value, t_list *temp)
 	return (1);
 }
 
-int	get_key_value(char *cmd, char *key, char *value)
+void	get_key_value(char *cmd, char **key, char **value)
 {
 	char	**split;
 
 	split = ft_split(cmd, '=');
 	if (!(split[1] == NULL))
 	{
-		key = strdup(split[0]);
-		value = strdup(split[1]);
+		*key = strdup(split[0]);
+		*value = strdup(split[1]);
 	}
 	else
-		key = strdup(cmd);
+	{
+		*key = strdup(cmd);
+		*value = 0;
+	}
 	free(split);
 }
 
