@@ -136,7 +136,7 @@ int		classify_redirection_type(char *str, int stdin_fd)
 	return (FAIL);
 }
 
-int		handle_redirection(t_parse_data *parsed_data, int stdin_fd)
+int		handle_redirection(t_parse_data *parsed_data)
 {
 	char	**splitted_red;
 	int		idx;
@@ -150,11 +150,10 @@ int		handle_redirection(t_parse_data *parsed_data, int stdin_fd)
 	idx = -1;
 	while (splitted_red[++idx])
 	{
-		err_chk = classify_redirection_type(splitted_red[idx], stdin_fd);
+		err_chk = classify_redirection_type(splitted_red[idx], all()->pipefd_backup[0]);
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);
-			delete_parsed_data(parsed_data);
 			return (err_chk);
 		}
 	}

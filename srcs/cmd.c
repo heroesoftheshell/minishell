@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 15:19:02 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 15:09:33 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	run_builtin(char **chunk)
 	return (1);
 }
 
-void	run_cmd(char **chunk)
+void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 {
 	char		*path;
 	char		**split_path;
@@ -68,6 +68,8 @@ void	run_cmd(char **chunk)
 	char		**env;
 	char		*exec_path;
 
+	if (handle_redirection(parsed_data))
+		return ;
 	if (!run_builtin(chunk))
 	{
 		env = make_env();
