@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/23 14:16:38 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/23 14:24:29 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 17:14:13 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	custom_rl_getc_fuction(FILE *stream)
 		{
 			rl_on_new_line();
 			write(1, "exit", 4);
-			// safe_exit(0, NULL);
 		}
 		if (result == sizeof(unsigned char))
 			return (c);

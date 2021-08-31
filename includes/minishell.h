@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 02:22:01 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/31 17:20:50 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct s_all
 {
 	t_list		*envp;
 	int			end_code;
+	int			pipefd_backup[2];
+	int			pid_list[BUFSIZ];
 }				t_all;
 
 typedef struct s_parsed_data
@@ -58,7 +60,8 @@ void			print_system_err(const char *str);
 char			*get_env_path(void);
 char			*get_env_variable(const char *env_key);
 void			set_env_variable(const char *env_key, const char *env_value);
-void			run_cmd(char **chunk);
+void			run_cmd(char **chunk, t_parse_data	*parsed_data);
+
 void			ft_chdir(char **cmd);
 void			ft_echo(char **cmd);
 void			ft_pwd(void);
@@ -85,10 +88,29 @@ char			**line_parse(const char *line);
 t_parse_data	*cmd_chunk_parse(const char *chunk);
 bool			is_include_filename_in_redirect(const char *str);
 int				custom_rl_getc_fuction(FILE *stream);
-int				handle_redirection(t_parse_data *parsed_data, int stdin_fd);
+int				handle_redirection(t_parse_data *parsed_data);
 int				check_env_key(char *cmd);
 int				validate_redirect_expression(const char **str, char start_c);
 char			*conv_env_var(const char **src, int str_idx, int *char_idx, \
 					bool is_inside_quote);
+void			do_nothing(int signo);
+void			catch_function_in(int signo);
+void			catch_function(int signo);
+void			init_signal(void);
+void			init_pipefd_backup(int *pipefd_backup);
+void			handle_input(char *input);
+int				is_builtin(char *cmd);
+
+void			first_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
+void			middle_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
+void			last_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
+void			none_pipe(t_parse_data *parsed_data);
+void			handle_parsed_data(t_parse_data *parsed_data, \
+					char *next_chunk, int *is_pipe, int *pipefd);
+void			dup_std(int pipe, int pipe2);
+void			close_both(int pipefd, int pipefd2);
 
 #endif
