@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   conv_env_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 17:32:23 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/30 17:39:40 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/31 17:43:41 by heom             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ static char	*get_converting_str(char const *str, unsigned int start, size_t len)
 char	*conv_env_var(const char **src, int str_idx, int *char_idx, \
 	bool is_inside_quote)
 {
-	char			*env_key;
-	char			*env_value;
-	char			*conv_str;
 	size_t			str_len;
 	unsigned int	start_char_idx;
 

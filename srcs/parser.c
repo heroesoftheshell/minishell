@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/30 17:40:29 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/31 17:13:48 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,87 +51,6 @@ char	**line_parse(const char *line)
 		str_index++;
 	}
 	return (pipe_cmd_chunk);
-}
-
-static char	*parse_quote_str(const char **src, char quote_char, int str_idx, \
-				int *char_idx)
-{
-	char			*converted_str;
-	char			*env_value;
-	char			*substr;
-	char			*joined_str;
-	int				str_len;
-	unsigned int	start_char_idx;
-
-	converted_str = NULL;
-	joined_str = NULL;
-	start_char_idx = *char_idx + 1;
-	str_len = 0;
-	while (src[str_idx][++(*char_idx)])
-	{
-		if (src[str_idx][*char_idx] == '$' && quote_char == '"')
-		{
-			if (*char_idx - start_char_idx > 0)
-			{
-				if (converted_str == NULL)
-					converted_str = ft_substr(src[str_idx], start_char_idx, \
-						*char_idx - start_char_idx);
-				else
-				{
-					substr = ft_substr(src[str_idx], start_char_idx, \
-						*char_idx - start_char_idx);
-					joined_str = ft_strjoin(converted_str, substr);
-					free(converted_str);
-					free(substr);
-					converted_str = joined_str;
-					substr = NULL;
-					joined_str = NULL;
-				}
-			}
-			env_value = conv_env_var(src, str_idx, char_idx, true);
-			if (env_value != NULL)
-			{
-				if (converted_str == NULL)
-				{
-					converted_str = env_value;
-				}
-				else
-				{
-					joined_str = ft_strjoin(converted_str, env_value);
-					free(converted_str);
-					free(env_value);
-					converted_str = joined_str;
-				}
-			}
-			start_char_idx = *char_idx;
-			if (src[str_idx][*char_idx] == '\0')
-				return (NULL);
-		}
-		if (src[str_idx][*char_idx] == '\0')
-		{
-			return (NULL);
-		}
-		else if (src[str_idx][*char_idx] == quote_char)
-		{
-			if (converted_str == NULL)
-			{
-				converted_str = ft_substr(src[str_idx], start_char_idx, \
-					*char_idx - start_char_idx);
-			}
-			else
-			{
-				substr = ft_substr(src[str_idx], start_char_idx, \
-					*char_idx - start_char_idx);
-				joined_str = ft_strjoin(converted_str, substr);
-				free(converted_str);
-				free(substr);
-				converted_str = joined_str;
-			}
-			return (converted_str);
-		}
-		str_len++;
-	}
-	return (NULL);
 }
 
 int	switch_str_to_handled_quote_str(char **splitted_data, \
@@ -224,63 +143,6 @@ int	switch_str_to_handled_quote_str(char **splitted_data, \
 		free(splitted_data[str_idx]);
 		splitted_data[str_idx] = joined_str;
 	}
-	return (SUCCESS);
-}
-
-int	divide_redirection(const char **splitted_data, \
-				t_parse_data *parsed_data)
-{
-	int		sd_idx;
-	int		cmd_count;
-	char	*joined_str;
-	char	*complete_red_str;
-
-	if (parsed_data == NULL)
-		return (FAIL);
-	sd_idx = -1;
-	cmd_count = 0;
-	while (splitted_data[++sd_idx])
-		cmd_count++;
-	parsed_data->cmd = (char **)ft_calloc(cmd_count + 1, sizeof(char *));
-	sd_idx = -1;
-	cmd_count = -1;
-	while (splitted_data[++sd_idx])
-	{
-		if (is_redirect_sign(splitted_data[sd_idx][0]))
-		{
-			if (is_include_filename_in_redirect(splitted_data[sd_idx]))
-			{
-				if (parsed_data->redirections)
-				{
-					joined_str = ft_strjoin3(parsed_data->redirections, \
-						",", splitted_data[sd_idx]);
-					free(parsed_data->redirections);
-					parsed_data->redirections = joined_str;
-				}
-				else
-					parsed_data->redirections = ft_strdup(splitted_data[sd_idx]);
-			}
-			else
-			{
-				complete_red_str = ft_strjoin(splitted_data[sd_idx], \
-					splitted_data[sd_idx + 1]);
-				if (parsed_data->redirections)
-				{
-					joined_str = ft_strjoin3(parsed_data->redirections, \
-						",", complete_red_str);
-					free(complete_red_str);
-					free(parsed_data->redirections);
-					parsed_data->redirections = joined_str;
-				}
-				else
-					parsed_data->redirections = complete_red_str;
-				++sd_idx;
-			}
-		}
-		else
-			(parsed_data->cmd)[++cmd_count] = ft_strdup(splitted_data[sd_idx]);
-	}
-	(parsed_data->cmd)[++cmd_count] = NULL;
 	return (SUCCESS);
 }
 

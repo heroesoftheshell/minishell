@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:20:50 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 17:42:50 by heom             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,14 @@ typedef struct s_parsed_data
 	char		*redirections;
 	char		**cmd;
 }				t_parse_data;
+
+typedef struct s_str_join_pack
+{
+	char		*joined_str;
+	char		*converted_str;
+	char		*substr;
+	char		*mid_str;
+}				t_str_join_pack;
 
 void			print_err_msg(int err_type, const char *str, char c);
 void			print_system_err(const char *str);
@@ -112,5 +120,13 @@ void			handle_parsed_data(t_parse_data *parsed_data, \
 					char *next_chunk, int *is_pipe, int *pipefd);
 void			dup_std(int pipe, int pipe2);
 void			close_both(int pipefd, int pipefd2);
+char			*parse_quote_str(const char **src, char quote_char, \
+					int str_idx, int *char_idx);
+char			*substr_join(char *prev_str, char *substr);
+char			*substr_join3(char *prefix, const char *mid_str, \
+					char *postfix);
+int				divide_redirection(const char **splitted_data, \
+					t_parse_data *parsed_data);
+
 
 #endif

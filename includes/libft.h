@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 17:26:17 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 15:55:49 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 12:17:57 by heom             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+enum	e_free_mode
+{
+	NO_FREE,
+	FREE_ALL,
+	FREE_FIRST_ARG,
+	FREE_SECOND_ARG
+};
 
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
@@ -80,5 +88,6 @@ size_t				ft_strnum(char *s, char c);
 char				*ft_strjoin3(char const *s1, char const *s2, \
 					char const *s3);
 char				*ft_strjoin_free_a(char *s1, char const *s2);
+char				*ft_strjoin_with_free(char *s1, char *s2, int free_mode);
 
 #endif
