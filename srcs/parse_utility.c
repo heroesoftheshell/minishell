@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 15:12:25 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/29 22:25:42 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/31 11:02:14 by heom             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,21 @@ void	skip_space(const char **str)
 		(*str)++;
 }
 
-int		is_redirect_sign(char c)
+int	is_redirect_sign(char c)
 {
 	if (c == '<' || c == '>')
 		return (1);
 	return (0);
 }
 
-int		is_quote(char c)
+int	is_quote(char c)
 {
 	if (c == '"' || c == '\'')
 		return (1);
 	return (0);
 }
 
-int		is_hyphen(char c)
+int	is_hyphen(char c)
 {
 	if (c == '-')
 		return (1);
