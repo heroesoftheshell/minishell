@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:18:53 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:16:36 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 17:22:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void	middle_pipe(t_parse_data *parsed_data, int *pid_list, int *pipefd)
 	}
 }
 
-void	last_pipe(t_parse_data *parsed_data,int *pid_list, int *pipefd)
+void	last_pipe(t_parse_data *parsed_data, int *pid_list, int *pipefd)
 {
 	int	pid;
 	int	exit_status;
-	int idx;
+	int	idx;
 
 	pid = fork();
 	if (pid == 0)
@@ -85,9 +85,9 @@ void	last_pipe(t_parse_data *parsed_data,int *pid_list, int *pipefd)
 		idx = 0;
 		while (pid_list[++idx])
 			waitpid(pid_list[idx], &exit_status, 0);
-			if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
-				all()->end_code = WEXITSTATUS(exit_status);
-			pid_list[idx] = 0;
+		if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
+			all()->end_code = WEXITSTATUS(exit_status);
+		pid_list[idx] = 0;
 	}
 	pid_list[0] = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:11:18 by hekang           ###   ########.fr       */
+/*   Updated: 2021/08/31 17:20:50 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,15 @@ void			init_pipefd_backup(int *pipefd_backup);
 void			handle_input(char *input);
 int				is_builtin(char *cmd);
 
-void			first_pipe(t_parse_data *parsed_data,int *pid_list, int *pipefd);
-void			middle_pipe(t_parse_data *parsed_data,int *pid_list, int *pipefd);
-void			last_pipe(t_parse_data *parsed_data,int *pid_list, int *pipefd);
+void			first_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
+void			middle_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
+void			last_pipe(t_parse_data *parsed_data, \
+					int *pid_list, int *pipefd);
 void			none_pipe(t_parse_data *parsed_data);
-void			handle_parsed_data(t_parse_data *parsed_data, char *next_chunk, int *is_pipe, int *pipefd);
+void			handle_parsed_data(t_parse_data *parsed_data, \
+					char *next_chunk, int *is_pipe, int *pipefd);
 void			dup_std(int pipe, int pipe2);
 void			close_both(int pipefd, int pipefd2);
 
