@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 16:34:30 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/01 17:01:21 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,9 @@ int	del_unset_key(char *key)
 
 void	ft_unset(char **cmd)
 {
-	int		ret;
 	int		cnt;
 
 	cnt = 0;
-	ret = 0;
 	while (cmd[++cnt])
 	{
 		if (!validate_env_key(cmd[cnt], 1))

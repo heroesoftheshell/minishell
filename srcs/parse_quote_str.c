@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quote_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:33:14 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/31 17:44:44 by heom             ###   ########.fr       */
+/*   Updated: 2021/09/01 16:07:00 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*parse_quote_str(const char **src, char quote_char, int str_idx, \
 
 	start_char_idx = *char_idx + 1;
 	str_len = 0;
+	converted_str = NULL;
 	while (src[str_idx][++(*char_idx)])
 	{
 		if (src[str_idx][*char_idx] == '$' && quote_char == '"')

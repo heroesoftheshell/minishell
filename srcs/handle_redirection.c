@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_redirection.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/01 16:42:00 by ghong             #+#    #+#             */
+/*   Updated: 2021/09/01 16:53:51 by ghong            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int		redirect_ouput(char *filename, bool is_append_mode)
+int	redirect_ouput(char *filename, bool is_append_mode)
 {
 	int	fd;
 
@@ -20,43 +32,7 @@ int		redirect_ouput(char *filename, bool is_append_mode)
 	return (SUCCESS);
 }
 
-int		exec_heredoc(int fd, const char *delimiter, int stdin_fd)
-{
-	char	*input;
-	char	*str;
-	char	*joined_str;
-
-	joined_str = NULL;
-	str = NULL;
-	dup2(stdin_fd, STDIN_FILENO);
-	while (1)
-	{
-		input = readline("\033[1;4;34;47m>\033[0m ");
-		if (ft_strcmp(input, delimiter) == 0)
-		{
-			write(fd, joined_str, ft_strlen(joined_str));
-			write(fd, "\n", 1);
-			free(joined_str);
-			free(input);
-			break ;
-		}
-		else
-		{
-			if (joined_str)
-			{
-				str = ft_strjoin3(joined_str, "\n", input);
-				free(joined_str);
-				free(input);
-				joined_str = str;
-			}
-			else
-				joined_str = input;
-		}
-	}
-	return (SUCCESS);
-}
-
-void		clear_temp(void)
+void	clear_temp(void)
 {
 	char	**argv;
 	pid_t	pid;
@@ -81,7 +57,7 @@ void		clear_temp(void)
 	free(argv);
 }
 
-int		redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
+int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
 {
 	int	fd;
 
@@ -103,12 +79,12 @@ int		redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	if(is_heredoc_mode)
+	if (is_heredoc_mode)
 		clear_temp();
 	return (SUCCESS);
 }
 
-int		classify_redirection_type(char *str, int stdin_fd)
+int	classify_redirection_type(char *str, int stdin_fd)
 {
 	int	idx;
 	int	err_chk;
@@ -136,7 +112,7 @@ int		classify_redirection_type(char *str, int stdin_fd)
 	return (FAIL);
 }
 
-int		handle_redirection(t_parse_data *parsed_data)
+int	handle_redirection(t_parse_data *parsed_data)
 {
 	char	**splitted_red;
 	int		idx;
@@ -150,7 +126,8 @@ int		handle_redirection(t_parse_data *parsed_data)
 	idx = -1;
 	while (splitted_red[++idx])
 	{
-		err_chk = classify_redirection_type(splitted_red[idx], all()->pipefd_backup[0]);
+		err_chk = classify_redirection_type(splitted_red[idx], \
+					all()->pipefd_backup[0]);
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);

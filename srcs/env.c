@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:28:02 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/01 17:03:13 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,13 @@ char	*get_env_variable(const char *env_key)
 	t_list		*current;
 	char		**split;
 	char		*ret;
-	char		*itoa_result;
 
 	ret = NULL;
 	if (env_key == NULL)
 		return (NULL);
-	if (!ft_strncmp("?", env_key, 1))
-	{
-		itoa_result = ft_itoa(all()->end_code);
-		ret = ft_strjoin(itoa_result, &env_key[1]);
-		free(itoa_result);
+	convert_env_execption(env_key, &ret);
+	if (ret)
 		return (ret);
-	}
-	if (!validate_env_key((char *)env_key, 0))
-		return (ft_strjoin("$", env_key));
 	current = all()->envp;
 	while (current)
 	{

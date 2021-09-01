@@ -3,225 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   switch_str_to_handled_quote_str.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 17:08:49 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/31 17:20:35 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/01 16:28:24 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_quote(char **splitted_data, int str_idx, int start_idx, \
-				int char_idx)
+static int	handle_quote(char **converted_str, char *substr, char *quote_str)
 {
-	substr = ft_substr(splitted_data[str_idx], start_idx, \
-			char_idx - start_idx);
-	quote_str = parse_quote_str((const char **)splitted_data, \
-			splitted_data[str_idx][char_idx], str_idx, &char_idx);
 	if (quote_str == NULL)
 	{
 		free(substr);
-		if (converted_str)
-			free(converted_str);
+		if (*converted_str)
+			free(*converted_str);
 		print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
 		return (QUOTE_EXIT_ERR);
 	}
-	if (converted_str == NULL)
-		converted_str = ft_strjoin(substr, quote_str);
-	else
-	{
-		joined_str = ft_strjoin(converted_str, substr);
-		free(converted_str);
-		free(substr);
-		converted_str = ft_strjoin(joined_str, quote_str);
-		free(joined_str);
-		free(quote_str);
-	}
+	*converted_str = substr_join3(*converted_str, substr, quote_str);
+	return (SUCCESS);
 }
 
-int	switch_str_to_handled_quote_str(char **splitted_data, \
-				int str_idx)
+static int	switch_str(char	*converted_str, char **sp_data, int si, \
+				unsigned int fci)
 {
-	// FIXME: string variables should change structure type
-	char	*converted_str;
-	char	*quote_str;
-	char	*substr;
-	char	*joined_str;
-	int		start_idx;
-	int		char_idx;
-
-	converted_str = NULL;
-	joined_str = NULL;
-	start_idx = 0;
-	char_idx = -1;
-	while (splitted_data[str_idx][++char_idx])
-	{
-		if (is_quote(splitted_data[str_idx][char_idx]))
-		{
-			substr = ft_substr(splitted_data[str_idx], start_idx, \
-				char_idx - start_idx);
-			quote_str = parse_quote_str((const char **)splitted_data, \
-					splitted_data[str_idx][char_idx], str_idx, &char_idx);
-			if (quote_str == NULL)
-			{
-				free(substr);
-				if (converted_str)
-					free(converted_str);
-				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
-				return (QUOTE_EXIT_ERR);
-			}
-			if (converted_str == NULL)
-				converted_str = ft_strjoin(substr, quote_str);
-			else
-			{
-				joined_str = ft_strjoin(converted_str, substr);
-				free(converted_str);
-				free(substr);
-				converted_str = ft_strjoin(joined_str, quote_str);
-				free(joined_str);
-				free(quote_str);
-			}
-			start_idx = char_idx + 1;
-		}
-		else if (splitted_data[str_idx][char_idx] == '$')
-		{
-			substr = ft_substr(splitted_data[str_idx], start_idx, \
-					char_idx - start_idx);
-			if (converted_str)
-			{
-				joined_str = ft_strjoin(converted_str, substr);
-				free(converted_str);
-				free(substr);
-				substr = conv_env_var((const char **)splitted_data, \
-					str_idx, &char_idx, false);
-				if (substr)
-				{
-					converted_str = ft_strjoin(joined_str, substr);
-					free(joined_str);
-					free(substr);
-				}
-				else
-				{
-					converted_str = joined_str;
-				}
-			}
-			else
-			{
-				converted_str = conv_env_var((const char **)splitted_data, \
-					str_idx, &char_idx, false);
-				if (converted_str == NULL)
-					converted_str = ft_strdup("\0");
-				joined_str = ft_strjoin(substr, converted_str);
-				free(substr);
-				free(converted_str);
-				converted_str = joined_str;
-			}
-			start_idx = char_idx + 1;
-		}
-	}
 	if (converted_str)
 	{
-		substr = ft_substr(splitted_data[str_idx], start_idx, \
-				char_idx - start_idx);
-		joined_str = ft_strjoin(converted_str, substr);
-		free(converted_str);
-		free(substr);
-		free(splitted_data[str_idx]);
-		splitted_data[str_idx] = joined_str;
+		converted_str = substr_join(converted_str, \
+			ft_substr(sp_data[si], fci, ft_strlen(&(sp_data[si][fci]))));
+		free(sp_data[si]);
+		sp_data[si] = converted_str;
 	}
 	return (SUCCESS);
 }
 
-// int	switch_str_to_handled_quote_str(char **splitted_data, \
-// 				int str_idx)
-// {
-// 	// FIXME: string variables should change structure type
-// 	char	*converted_str;
-// 	char	*quote_str;
-// 	char	*substr;
-// 	char	*joined_str;
-// 	int		start_idx;
-// 	int		char_idx;
+static int	check_str_expanding(char **sp_data, char **converted_str, \
+				int si, unsigned int *fci)
+{
+	int		ci;
+	char	*substr;
 
-// 	converted_str = NULL;
-// 	joined_str = NULL;
-// 	start_idx = 0;
-// 	char_idx = -1;
-// 	while (splitted_data[str_idx][++char_idx])
-// 	{
-// 		if (is_quote(splitted_data[str_idx][char_idx]))
-// 		{
-// 			substr = ft_substr(splitted_data[str_idx], start_idx, \
-// 						char_idx - start_idx);
-// 			quote_str = parse_quote_str((const char **)splitted_data, \
-// 					splitted_data[str_idx][char_idx], str_idx, &char_idx);
-// 			if (quote_str == NULL)
-// 			{
-// 				free(substr);
-// 				if (converted_str)
-// 					free(converted_str);
-// 				print_err_msg(QUOTE_EXIT_ERR, "quote exit error", 0);
-// 				return (QUOTE_EXIT_ERR);
-// 			}
-// 			if (converted_str == NULL)
-// 				converted_str = ft_strjoin(substr, quote_str);
-// 			else
-// 			{
-// 				joined_str = ft_strjoin(converted_str, substr);
-// 				free(converted_str);
-// 				free(substr);
-// 				converted_str = ft_strjoin(joined_str, quote_str);
-// 				free(joined_str);
-// 				free(quote_str);
-// 			}
-// 			start_idx = char_idx + 1;
-// 		}
-// 		else if (splitted_data[str_idx][char_idx] == '$')
-// 		{
-// 			substr = ft_substr(splitted_data[str_idx], start_idx, \
-// 					char_idx - start_idx);
-// 			if (converted_str)
-// 			{
-// 				joined_str = ft_strjoin(converted_str, substr);
-// 				free(converted_str);
-// 				free(substr);
-// 				substr = conv_env_var((const char **)splitted_data, \
-// 					str_idx, &char_idx, false);
-// 				if (substr)
-// 				{
-// 					converted_str = ft_strjoin(joined_str, substr);
-// 					free(joined_str);
-// 					free(substr);
-// 				}
-// 				else
-// 				{
-// 					converted_str = joined_str;
-// 				}
-// 			}
-// 			else
-// 			{
-// 				converted_str = conv_env_var((const char **)splitted_data, \
-// 					str_idx, &char_idx, false);
-// 				if (converted_str == NULL)
-// 					converted_str = ft_strdup("\0");
-// 				joined_str = ft_strjoin(substr, converted_str);
-// 				free(substr);
-// 				free(converted_str);
-// 				converted_str = joined_str;
-// 			}
-// 			start_idx = char_idx + 1;
-// 		}
-// 	}
-// 	if (converted_str)
-// 	{
-// 		substr = ft_substr(splitted_data[str_idx], start_idx, \
-// 				char_idx - start_idx);
-// 		joined_str = ft_strjoin(converted_str, substr);
-// 		free(converted_str);
-// 		free(substr);
-// 		free(splitted_data[str_idx]);
-// 		splitted_data[str_idx] = joined_str;
-// 	}
-// 	return (SUCCESS);
-// }
+	ci = -1;
+	while (sp_data[si][++ci])
+	{
+		if (is_quote(sp_data[si][ci]))
+		{
+			substr = ft_substr(sp_data[si], *fci, ci - *fci);
+			if (handle_quote(converted_str, substr, \
+					parse_quote_str((const char **)sp_data, \
+					sp_data[si][ci], si, &ci)) != SUCCESS)
+				return (QUOTE_EXIT_ERR);
+			*fci = ci + 1;
+		}
+		else if (sp_data[si][ci] == '$')
+		{
+			substr = ft_substr(sp_data[si], *fci, ci - *fci);
+			*converted_str = substr_join3(*converted_str, substr, \
+				conv_env_var((const char **)sp_data, si, &ci, false));
+			*fci = ci + 1;
+		}
+	}
+	return (SUCCESS);
+}
+
+int	switch_str_to_handled_quote_str(char **sp_data, int si)
+{
+	char			*converted_str;
+	unsigned int	fci;
+	int				err_chk;
+
+	converted_str = NULL;
+	fci = 0;
+	err_chk = check_str_expanding(sp_data, &converted_str, si, &fci);
+	if (err_chk != SUCCESS)
+		return (FAIL);
+	return (switch_str(converted_str, sp_data, si, fci));
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heom <heom@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:42:50 by heom             ###   ########.fr       */
+/*   Updated: 2021/09/01 17:02:44 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,12 @@ void			close_both(int pipefd, int pipefd2);
 char			*parse_quote_str(const char **src, char quote_char, \
 					int str_idx, int *char_idx);
 char			*substr_join(char *prev_str, char *substr);
-char			*substr_join3(char *prefix, const char *mid_str, \
+char			*substr_join3(char *prefix, char *mid_str, \
 					char *postfix);
 int				divide_redirection(const char **splitted_data, \
 					t_parse_data *parsed_data);
-
+int				switch_str_to_handled_quote_str(char **sp_data, int si);
+int				exec_heredoc(int fd, const char *delimiter, int stdin_fd);
+void			convert_env_execption(const char *env_key, char **ret);
 
 #endif

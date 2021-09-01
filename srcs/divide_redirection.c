@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   divide_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:33:24 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/31 16:46:45 by ghong            ###   ########.fr       */
+/*   Updated: 2021/08/31 21:22:24 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ static void	set_redirections_str(const char **splitted_data, \
 {
 	if (is_include_filename_in_redirect(splitted_data[*sd_idx]))
 		parsed_data->redirections = \
-			substr_join3(parsed_data->redirections, ",", \
+			substr_join3(parsed_data->redirections, ft_strdup(","), \
 			ft_strdup(splitted_data[*sd_idx]));
 	else
 	{
 		parsed_data->redirections = \
-			substr_join3(parsed_data->redirections, ",", \
+			substr_join3(parsed_data->redirections, ft_strdup(","), \
 			ft_strjoin(splitted_data[*sd_idx], \
 			splitted_data[*sd_idx + 1]));
 		++(*sd_idx);
