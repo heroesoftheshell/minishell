@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 17:32:23 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/01 17:18:11 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/01 17:59:59 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static char	*get_converting_str(char const *str, unsigned int start, size_t len)
 {
-	char			*env_key;
-	char			*env_value;
+	char	*env_key;
+	char	*env_value;
 
 	if (len == 0)
 		return (ft_strdup("$"));
@@ -30,8 +30,10 @@ char	*conv_env_var(const char **src, int str_idx, int *char_idx, \
 	bool is_inside_quote)
 {
 	size_t			str_len;
+	int				si;
 	unsigned int	start_char_idx;
 
+	si = *char_idx;
 	start_char_idx = *char_idx + 1;
 	str_len = 0;
 	while (src[str_idx][++(*char_idx)])
@@ -41,6 +43,8 @@ char	*conv_env_var(const char **src, int str_idx, int *char_idx, \
 		{
 			if (!is_inside_quote)
 				--(*char_idx);
+			if (!is_inside_quote && *char_idx == si)
+				return (NULL);
 			return (get_converting_str(src[str_idx], start_char_idx, str_len));
 		}
 		str_len++;
