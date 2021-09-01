@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cmdline_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 21:00:26 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/30 15:14:55 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/01 16:39:34 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static int		is_delimiter(char c, char *delimiter)
+static int	is_delimiter(char c, char *delimiter)
 {
 	if (ft_strchr((const char *)delimiter, c) == NULL)
 	{
@@ -48,7 +48,7 @@ static size_t	count_word(char	const *s, char *delimeter)
 	return (count);
 }
 
-static void		delete_words(char **arr)
+static void	delete_words(char **arr)
 {
 	size_t	i;
 
@@ -61,7 +61,7 @@ static void		delete_words(char **arr)
 	}
 }
 
-static int		insert_words(char **arr, char const *s, char *c)
+static int	insert_words(char **arr, char const *s, char *c)
 {
 	size_t	word_len;
 	size_t	i;
@@ -82,14 +82,15 @@ static int		insert_words(char **arr, char const *s, char *c)
 			word_len++;
 			i++;
 		}
-		if ((arr[j++] = ft_substr(s, i - word_len, word_len)) == NULL)
+		arr[j] = ft_substr(s, i - word_len, word_len);
+		if (arr[j++] == NULL)
 			return (0);
 		word_len = 0;
 	}
 	return (1);
 }
 
-char			**cmdline_split(char const *s, char *delimeter)
+char	**cmdline_split(char const *s, char *delimeter)
 {
 	char	**split_arr;
 	size_t	words_count;

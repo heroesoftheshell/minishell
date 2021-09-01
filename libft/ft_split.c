@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:23:51 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 13:51:13 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/01 17:02:02 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ void	str_malloc_copy(char *s, char c, size_t num, char **res)
 	size_t	x;
 	size_t	i;
 	size_t	len;
-	size_t	cnt;
 
-	cnt = 0;
 	i = 0;
 	x = 0;
 	while (s[i] && x < num)

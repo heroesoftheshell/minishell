@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_msg.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:07:28 by ghong             #+#    #+#             */
-/*   Updated: 2021/08/30 16:04:58 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/01 16:40:56 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_err_msg(int err_type, const char *str, char c)
 {
-	if (err_type == PIPE_SYNTAX_ERR || err_type == REDIRECT_SYNTAX_ERR ||\
+	if (err_type == PIPE_SYNTAX_ERR || err_type == REDIRECT_SYNTAX_ERR || \
 		err_type == NEWLINE_SYNTAX_ERR)
 	{
 		ft_putstr_fd(SYNTAX_ERR_MSG_HEADER, STDERR_FILENO);
@@ -24,7 +24,7 @@ void	print_err_msg(int err_type, const char *str, char c)
 			ft_putstr_fd((char *)str, STDERR_FILENO);
 		ft_putendl_fd(SYNTAX_ERR_MSG_TAIL, STDERR_FILENO);
 	}
-	else 
+	else
 		ft_putendl_fd((char *)str, STDERR_FILENO);
 }
 
