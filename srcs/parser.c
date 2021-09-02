@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 11:24:08 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/01 15:48:41 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 12:02:38 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	**line_parse(const char *line)
 		print_err_msg(PIPE_SYNTAX_ERR, "|", 0);
 		return (NULL);
 	}
+	skip_space(&line);
 	pipe_cmd_chunk = cmdline_split(line, "|");
 	str_index = 0;
 	while (pipe_cmd_chunk && pipe_cmd_chunk[str_index])
