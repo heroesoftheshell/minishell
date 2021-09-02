@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/01 16:42:00 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/02 14:37:39 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 14:53:36 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,9 @@ int	classify_redirection_type(char *str, int stdin_fd, char *cmd)
 		else if (str[idx] == '<')
 		{
 			if (str[idx + 1] == '<')
-				err_chk = redirect_input(&(str[idx + 2]), true, stdin_fd);
+				err_chk = redirect_input(&(str[idx + 2]), true, stdin_fd, cmd);
 			else
-				err_chk = redirect_input(&(str[idx + 1]), false, stdin_fd);
+				err_chk = redirect_input(&(str[idx + 1]), false, stdin_fd, cmd);
 			return (err_chk);
 		}
 	}
