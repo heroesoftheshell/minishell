@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 15:09:33 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/02 14:53:29 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 	char		**env;
 	char		*exec_path;
 
-	if (handle_redirection(parsed_data))
+	if (handle_redirection(parsed_data, chunk[0]))
 		return ;
 	if (!run_builtin(chunk))
 	{
