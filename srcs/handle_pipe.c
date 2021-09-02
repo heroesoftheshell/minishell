@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:18:53 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 11:22:24 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/02 11:44:03 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ void	last_pipe(t_parse_data *parsed_data, int *pid_list, int *pipefd)
 		idx = 0;
 		while (pid_list[++idx])
 			waitpid(pid_list[idx], &exit_status, 0);
-		if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
-			all()->end_code = WEXITSTATUS(exit_status);
+		handle_exit_status(exit_status);
 		pid_list[idx] = 0;
 	}
 	pid_list[0] = 1;
@@ -110,17 +109,7 @@ void	none_pipe(t_parse_data *parsed_data)
 		else
 		{
 			waitpid(pid, &exit_status, 0);
-			if (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT)
-				sig_num = WTERMSIG(exit_status);
-			if (sig_num == SIGINT)
-			{
-				all()->end_code = 130;
-			}
-			else if (sig_num == SIGQUIT)
-			{
-				write(1, "QUIT: 3\n", 8);
-				all()->end_code = 131;
-			}
+			handle_exit_status(exit_status);
 		}
 	}
 }
