@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:15:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/01 17:03:13 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 10:56:18 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*get_env_path(void)
 	return (ret);
 }
 
-void	set_env_variable(const char *env_key, const char *env_value)
+void	set_env_variable(const char *env_key, char *env_value)
 {
 	t_list		*current;
 	char		**split;
@@ -71,7 +71,10 @@ void	set_env_variable(const char *env_key, const char *env_value)
 	{
 		split = ft_split(current->content, '=');
 		if (!ft_strcmp(env_key, split[0]))
+		{
+			free(current->content);
 			current->content = ft_strjoin3(env_key, "=", env_value);
+		}
 		current = current->next;
 		delete_split_strs(split);
 	}

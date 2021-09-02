@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   switch_str_to_handled_quote_str.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 17:08:49 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/01 16:28:24 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 10:23:09 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	handle_quote(char **converted_str, char *substr, char *quote_str)
 	return (SUCCESS);
 }
 
-static int	switch_str(char	*converted_str, char **sp_data, int si, \
+static int	switch_str(char *converted_str, char **sp_data, int si, \
 				unsigned int fci)
 {
 	if (converted_str)
