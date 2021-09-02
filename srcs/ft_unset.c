@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:54:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/01 17:01:21 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 10:48:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ int	del_unset_key(char *key)
 			prev->next = current->next;
 			free(current->content);
 			free(current);
+			delete_split_strs(split);
+			free(list_key);
 			return (1);
 		}
-		free(split);
+		delete_split_strs(split);
 		free(list_key);
 		prev = current;
 		current = current->next;

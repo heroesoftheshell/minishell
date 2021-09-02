@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 16:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 16:30:39 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/02 11:01:34 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ void	print_declare(char *str)
 	env = ft_split(str, '=');
 	s = ft_strjoin("declare -x ", env[0]);
 	if (env[1])
-		s = ft_strjoin_free_a(ft_strjoin_free_a(s, "=\""), \
+		s = substr_join(ft_strjoin_free_a(s, "=\""), \
 		ft_strjoin(env[1], "\""));
 	ft_putendl_fd(s, STDOUT_FILENO);
+	delete_split_strs(env);
 	free (s);
 }
 

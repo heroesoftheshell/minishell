@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/01 17:02:44 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 10:53:42 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void			print_system_err(const char *str);
 
 char			*get_env_path(void);
 char			*get_env_variable(const char *env_key);
-void			set_env_variable(const char *env_key, const char *env_value);
+void			set_env_variable(const char *env_key, char *env_value);
 void			run_cmd(char **chunk, t_parse_data	*parsed_data);
 
 void			ft_chdir(char **cmd);

@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:13:43 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/30 15:54:32 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/02 10:56:46 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	ft_chdir(char **cmd)
 	{
 		chdir_errno(errno, cmd[1]);
 		all()->end_code = 1;
+		free(pwd);
 		return ;
 	}
 	set_env_variable("PWD", getcwd(buf, 255));
