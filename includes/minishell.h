@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 11:34:56 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/02 14:44:06 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,6 @@ typedef struct s_parsed_data
 	char		*redirections;
 	char		**cmd;
 }				t_parse_data;
-
-typedef struct s_str_join_pack
-{
-	char		*joined_str;
-	char		*converted_str;
-	char		*substr;
-	char		*mid_str;
-}				t_str_join_pack;
 
 void			print_err_msg(int err_type, const char *str, char c);
 void			print_system_err(const char *str);

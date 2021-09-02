@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/01 16:42:00 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/01 16:53:51 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 14:37:39 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ int	redirect_ouput(char *filename, bool is_append_mode)
 	return (SUCCESS);
 }
 
-void	clear_temp(void)
+void	clear_temp(bool is_heredoc_mode)
 {
 	char	**argv;
 	pid_t	pid;
 	int		exit_status;
 
+	if (!is_heredoc_mode)
+		return ;
 	argv = malloc(sizeof(char *) * 3);
 	argv[0] = "-f";
 	argv[1] = "./temp";
@@ -57,7 +59,8 @@ void	clear_temp(void)
 	free(argv);
 }
 
-int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
+int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd, \
+		char *cmd)
 {
 	int	fd;
 
@@ -75,16 +78,18 @@ int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd)
 		all()->end_code = 1;
 		ft_putstr_fd("\033[1;4;34;47mHOS:\033[0m ", STDERR_FILENO);
 		perror(filename);
-		exit(all()->end_code);
+		if (is_builtin(cmd))
+			return (FAIL);
+		else
+			exit(all()->end_code);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	if (is_heredoc_mode)
-		clear_temp();
+	clear_temp(is_heredoc_mode);
 	return (SUCCESS);
 }
 
-int	classify_redirection_type(char *str, int stdin_fd)
+int	classify_redirection_type(char *str, int stdin_fd, char *cmd)
 {
 	int	idx;
 	int	err_chk;
@@ -112,7 +117,7 @@ int	classify_redirection_type(char *str, int stdin_fd)
 	return (FAIL);
 }
 
-int	handle_redirection(t_parse_data *parsed_data)
+int	handle_redirection(t_parse_data *parsed_data, char *cmd)
 {
 	char	**splitted_red;
 	int		idx;
@@ -127,7 +132,7 @@ int	handle_redirection(t_parse_data *parsed_data)
 	while (splitted_red[++idx])
 	{
 		err_chk = classify_redirection_type(splitted_red[idx], \
-					all()->pipefd_backup[0]);
+					all()->pipefd_backup[0], cmd);
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);
