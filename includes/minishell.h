@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 14:53:41 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/02 16:10:49 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,5 +123,7 @@ int				switch_str_to_handled_quote_str(char **sp_data, int si);
 int				exec_heredoc(int fd, const char *delimiter, int stdin_fd);
 void			convert_env_execption(const char *env_key, char **ret);
 void			handle_exit_status(int exit_status);
+void			get_key_value(char *cmd, char **key, char **value);
+
 
 #endif
