@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 14:53:29 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/07 17:55:37 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 		while (split_path[++cnt])
 		{
 			exec_path = ft_strjoin3(split_path[cnt], "/", chunk[0]);
-			execve(exec_path, chunk, env);
+			execve(exec_path, chunk, NULL);
 			free(exec_path);
 		}
 		execve(chunk[0], chunk, env);
