@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:18:53 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 11:44:03 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/07 20:42:07 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,8 @@ void	none_pipe(t_parse_data *parsed_data)
 {
 	int	pid;
 	int	exit_status;
-	int	sig_num;
 
 	pid = 0;
-	sig_num = 0;
 	if (is_builtin((parsed_data->cmd)[0]))
 		run_cmd(parsed_data->cmd, parsed_data);
 	else

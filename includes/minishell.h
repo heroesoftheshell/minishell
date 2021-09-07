@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 16:10:49 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/07 20:42:50 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ typedef struct s_parsed_data
 {
 	char		*redirections;
 	char		**cmd;
+	char		*last_in_fname;
+	char		*last_out_fname;
+	int			cmd_count;
 }				t_parse_data;
 
 void			print_err_msg(int err_type, const char *str, char c);
@@ -117,13 +120,15 @@ char			*parse_quote_str(const char **src, char quote_char, \
 char			*substr_join(char *prev_str, char *substr);
 char			*substr_join3(char *prefix, char *mid_str, \
 					char *postfix);
-int				divide_redirection(const char **splitted_data, \
-					t_parse_data *parsed_data);
+void			divide_redirection(char **sp_data, t_parse_data *p_data);
 int				switch_str_to_handled_quote_str(char **sp_data, int si);
 int				exec_heredoc(int fd, const char *delimiter, int stdin_fd);
 void			convert_env_execption(const char *env_key, char **ret);
 void			handle_exit_status(int exit_status);
 void			get_key_value(char *cmd, char **key, char **value);
-
+int				str_count(char **str);
+void			naive_skip_quote(char *s, int *ci);
+void			set_str_for_prev_redir(t_parse_data *p_data, char *str, \
+					char prev_redir);
 
 #endif
