@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghong <ghong@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/01 16:42:00 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/02 14:53:36 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/08 17:57:46 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	redirect_ouput(char *filename, bool is_append_mode)
+int	redirect_ouput(char *filename, bool is_append_mode, t_parse_data *p_data)
 {
 	int	fd;
 
@@ -27,7 +27,8 @@ int	redirect_ouput(char *filename, bool is_append_mode)
 		perror(filename);
 		exit(all()->end_code);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (ft_strcmp(p_data->last_out_fname, filename) == 0)
+		dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (SUCCESS);
 }
@@ -59,20 +60,11 @@ void	clear_temp(bool is_heredoc_mode)
 	free(argv);
 }
 
-int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd, \
-		char *cmd)
+int	redirect_input(char *filename, char *cmd, t_parse_data *p_data)
 {
 	int	fd;
 
-	if (is_heredoc_mode)
-	{
-		fd = open("./temp", O_RDWR | O_CREAT | O_TRUNC, 0644);
-		exec_heredoc(fd, filename, stdin_fd);
-		close(fd);
-		fd = open("./temp", O_RDONLY, 0644);
-	}
-	else
-		fd = open(filename, O_RDONLY);
+	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
 		all()->end_code = 1;
@@ -83,13 +75,13 @@ int	redirect_input(char *filename, bool is_heredoc_mode, int stdin_fd, \
 		else
 			exit(all()->end_code);
 	}
-	dup2(fd, STDIN_FILENO);
+	if (ft_strcmp(p_data->last_in_fname, filename) == 0)
+		dup2(fd, STDIN_FILENO);
 	close(fd);
-	clear_temp(is_heredoc_mode);
 	return (SUCCESS);
 }
 
-int	classify_redirection_type(char *str, int stdin_fd, char *cmd)
+int	classify_redirection_type(char *str, char *cmd, t_parse_data *p_data)
 {
 	int	idx;
 	int	err_chk;
@@ -100,17 +92,17 @@ int	classify_redirection_type(char *str, int stdin_fd, char *cmd)
 		if (str[idx] == '>')
 		{
 			if (str[idx + 1] == '>')
-				err_chk = redirect_ouput(&(str[idx + 2]), true);
+				err_chk = redirect_ouput(&(str[idx + 2]), true, p_data);
 			else
-				err_chk = redirect_ouput(&(str[idx + 1]), false);
+				err_chk = redirect_ouput(&(str[idx + 1]), false, p_data);
 			return (err_chk);
 		}
 		else if (str[idx] == '<')
 		{
 			if (str[idx + 1] == '<')
-				err_chk = redirect_input(&(str[idx + 2]), true, stdin_fd, cmd);
+				return (SUCCESS);
 			else
-				err_chk = redirect_input(&(str[idx + 1]), false, stdin_fd, cmd);
+				err_chk = redirect_input(&(str[idx + 1]), cmd, p_data);
 			return (err_chk);
 		}
 	}
@@ -128,11 +120,12 @@ int	handle_redirection(t_parse_data *parsed_data, char *cmd)
 	splitted_red = ft_split(parsed_data->redirections, ',');
 	if (splitted_red == NULL)
 		return (FAIL);
+	catch_heredoc(splitted_red, parsed_data);
 	idx = -1;
 	while (splitted_red[++idx])
 	{
 		err_chk = classify_redirection_type(splitted_red[idx], \
-					all()->pipefd_backup[0], cmd);
+					cmd, parsed_data);
 		if (err_chk != SUCCESS)
 		{
 			delete_split_strs(splitted_red);
