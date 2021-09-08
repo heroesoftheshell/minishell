@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 16:30:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 10:48:34 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/07 22:07:38 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	check_env_key(char *cmd)
 	{
 		split = ft_split(temp->content, '=');
 		if (!ft_strcmp(split[0], key))
+		{
+			delete_split_strs(split);
 			return (push_value(key, value, temp));
+		}
 		temp = temp->next;
 		delete_split_strs(split);
 	}
