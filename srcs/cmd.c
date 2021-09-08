@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/07 22:12:28 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/08 21:06:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,12 @@ void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 	char		*path;
 	char		**split_path;
 	int			cnt;
-	char		**env;
 	char		*exec_path;
 
 	if (handle_redirection(parsed_data, chunk[0]))
 		return ;
 	if (!run_builtin(chunk))
 	{
-		env = make_env();
 		path = get_env_path();
 		split_path = ft_split(path, ':');
 		cnt = -1;
@@ -82,9 +80,8 @@ void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 			execve(exec_path, chunk, NULL);
 			free(exec_path);
 		}
-		execve(chunk[0], chunk, env);
+		execve(chunk[0], chunk, NULL);
 		ft_print_cmd_error(chunk[0]);
-		free(env);
 		exit(all()->end_code);
 	}
 }
