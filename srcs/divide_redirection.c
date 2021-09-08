@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:33:24 by ghong             #+#    #+#             */
-/*   Updated: 2021/09/07 20:39:41 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/08 18:47:22 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	pick_redirection(char **sp_data, int *si, int *ci, \
 	int		s_ci;
 
 	s_ci = *ci;
-	if (!is_include_filename_in_redirect(sp_data[*si]))
+	if (!is_include_filename_in_redirect(&sp_data[*si][*ci]))
 	{
 		set_redirections(sp_data[*si], s_ci, ft_strlen(sp_data[*si]), p_data);
 		++(*si);

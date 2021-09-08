@@ -6,7 +6,7 @@
 /*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/07 20:42:50 by ghong            ###   ########.fr       */
+/*   Updated: 2021/09/08 17:26:09 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,7 @@ int				str_count(char **str);
 void			naive_skip_quote(char *s, int *ci);
 void			set_str_for_prev_redir(t_parse_data *p_data, char *str, \
 					char prev_redir);
+void			clear_temp(bool is_heredoc_mode);
+void			catch_heredoc(char **sp_data, t_parse_data *p_data);
 
 #endif
