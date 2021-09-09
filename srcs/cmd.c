@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/08 21:06:55 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 09:19:02 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	run_builtin(char **chunk)
 	else if (!ft_strcmp(chunk[0], "$?"))
 		ft_print_endcode();
 	else if (!ft_strcmp(chunk[0], "exit"))
-		ft_exit(chunk[1]);
+		ft_exit(chunk);
 	else
 		return (0);
 	return (1);
