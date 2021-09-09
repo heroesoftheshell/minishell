@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:13:43 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 10:56:46 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 09:34:25 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	ft_chdir(char **cmd)
 
 	if (cmd[1] == NULL || !ft_strcmp("~", cmd[1]))
 		pwd = get_env_variable("HOME");
+	else if (cmd[1][0] == '/')
+		pwd = ft_strdup(cmd[1]);
 	else
 	{
 		pwd = get_env_variable("PWD");

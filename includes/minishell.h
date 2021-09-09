@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 10:23:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/09 08:40:02 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 09:45:45 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,12 @@
 # include <unistd.h>
 # include <readline/history.h>
 # include "readline.h"
-# include <string.h>
 # include <signal.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
 # include "libft.h"
-# define SYNTAX_ERR_MSG_HEADER	"hosh: syntax error near unexpected token `"
+# define SYNTAX_ERR_MSG_HEADER	"\033[1;4;34;47mHOS\033[0m: syntax error near unexpected token `"
 # define SYNTAX_ERR_MSG_TAIL	"'"
 
 enum	e_err_type
