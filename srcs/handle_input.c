@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 14:36:28 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/02 11:43:13 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 11:11:52 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	handle_input(char *input)
 			&is_pipe, pipefd);
 	}
 	delete_split_strs(cmd_chunks);
-	add_history(input);
+	if (input[0])
+		add_history(input);
 	signal(SIGINT, catch_function);
 	free(input);
 }
