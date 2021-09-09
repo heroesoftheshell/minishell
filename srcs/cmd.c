@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 17:19:08 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/09 09:19:02 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 10:27:26 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	run_cmd(char **chunk, t_parse_data	*parsed_data)
 
 	if (handle_redirection(parsed_data, chunk[0]))
 		return ;
-	if (!run_builtin(chunk))
+	if (!run_builtin(chunk) && !is_builtin(chunk[0]))
 	{
 		path = get_env_path();
 		split_path = ft_split(path, ':');

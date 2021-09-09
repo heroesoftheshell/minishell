@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:12:27 by hekang            #+#    #+#             */
-/*   Updated: 2021/08/31 17:13:47 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 10:26:22 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_builtin(char *cmd)
 {
+	if (cmd && cmd[0] == '\0')
+		return (1);
 	if (!ft_strcmp(cmd, "cd") || \
 		!ft_strcmp(cmd, "echo") || \
 		!ft_strcmp(cmd, "exit") || \

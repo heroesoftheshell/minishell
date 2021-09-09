@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ghong <ghong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 16:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2021/09/07 22:13:11 by hekang           ###   ########.fr       */
+/*   Updated: 2021/09/09 10:10:15 by ghong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_export(char **cmd)
 	int	cnt;
 
 	cnt = 0;
-	if (cmd[1] == NULL)
+	if (cmd[1] == NULL || cmd[1][0] == '\0')
 		export_declare();
 	else
 	{
